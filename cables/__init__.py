@@ -9,7 +9,6 @@ from pyramid.security import unauthenticated_userid
 import sqlalchemy
 import sqlahelper
 import pyramid_tm
-import papyrus
 
 from pyramid_beaker import session_factory_from_settings
 
@@ -19,7 +18,7 @@ def main(global_config, **settings):
 
     session_factory = session_factory_from_settings(settings)
 
-    config = Configurator(root_factory=Root, settings=settings,
+    config = Configurator(settings=settings,
                           session_factory=session_factory)
 
     config.include('pyramid_mako')
@@ -30,7 +29,7 @@ def main(global_config, **settings):
 
 
     # add the "geojson" and "csv" renderer
-    config.add_renderer(name='csv', factory='siacg62.renderers.CSVRenderer')
+    config.add_renderer(name='csv', factory='cables.renderers.CSVRenderer')
 
     # add routes to the entry view class
     config.add_route('home', '/')
@@ -40,7 +39,7 @@ def main(global_config, **settings):
     config.scan()
 
     # add the static view (for static resources)
-    config.add_static_view('static', 'siacg62:static')
+    config.add_static_view('static', 'cables:static')
 
     return config.make_wsgi_app()
 
