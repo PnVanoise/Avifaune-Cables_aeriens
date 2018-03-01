@@ -27,6 +27,7 @@ requires = [
     'enum',
     'pgcli',
     'sqlacodegen',
+    'numpy',
 ]
 
 test_requires = requires.extend(['WebTest',
