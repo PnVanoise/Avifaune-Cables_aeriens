@@ -32,7 +32,7 @@ def main(global_config, **settings):
     config.add_renderer(name='csv', factory='cables.renderers.CSVRenderer')
 
     # add routes to the entry view class
-    config.add_route('home', '/')
+    config.add_route('export', '/export')
 
     # we need to call scan() for the "home" and "countries"
     # routes
