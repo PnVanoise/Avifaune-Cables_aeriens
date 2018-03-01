@@ -4,7 +4,7 @@ import sqlahelper
 
 from sqlalchemy import BigInteger, Boolean, CheckConstraint, Column, Date, DateTime, Float, ForeignKey, Index, Integer, String, Table, Text, text
 from sqlalchemy.sql.sqltypes import NullType
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, mapper
 from sqlalchemy.ext.declarative import declarative_base
 
 log = logging.getLogger(__name__)
@@ -678,7 +678,7 @@ t_v_sites_nidification_zone_tampon = Table(
 
 t_v_zones_sensibles = Table(
     'v_zones_sensibles', metadata,
-    Column('id_zone_sensible', Integer),
+    Column('id_zone_sensible', Integer, primary_key=True),
     Column('nom_zone_sensible', String),
     Column('niveau_sensibilite', Integer),
     Column('nb_poteaux_inventories', BigInteger),
@@ -700,6 +700,9 @@ t_v_zones_sensibles = Table(
     Column('geom', Text),
     schema='cables73'
 )
+class TVZonesSensibles(object):
+    pass
+mapper(TVZonesSensibles, t_v_zones_sensibles)
 
 
 t_v_zones_sensibles_poteaux = Table(
