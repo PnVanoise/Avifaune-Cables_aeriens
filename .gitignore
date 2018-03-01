@@ -1,0 +1,15 @@
+.installed.cfg
+MANIFEST
+Cables.egg-info/
+apache/README.txt
+apache/frontend.conf
+apache/mapserver.conf
+apache/tilecache.conf
+apache/wsgi.conf
+buildout/
+deploy/deploy.cfg
+test.ini
+.coverage
+bootstrap_db.sh
+coverage.xml
+nosetests.xml
