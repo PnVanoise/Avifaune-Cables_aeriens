@@ -500,6 +500,33 @@ class TEspece(Base):
     taille_zone_tampon = Column(Integer)
     code_couleur = Column(String(20))
 
+t_v_zones_sensibles = Table(
+    'v_zones_sensibles', metadata,
+    Column('id_zone_sensible', Integer, primary_key=True),
+    Column('nom_zone_sensible', String),
+    Column('niveau_sensibilite', Integer),
+    Column('nb_poteaux_inventories', BigInteger),
+    Column('nb_poteaux_inventories_risque_fort', BigInteger),
+    Column('nb_poteaux_inventories_risque_secondaire', BigInteger),
+    Column('nb_poteaux_inventories_risque_faible', BigInteger),
+    Column('nb_poteaux_equipes', BigInteger),
+    Column('nb_poteaux_equipes_risque_fort', BigInteger),
+    Column('nb_poteaux_equipes_risque_secondaire', BigInteger),
+    Column('nb_poteaux_equipes_risque_faible', BigInteger),
+    Column('m_troncons_inventories', Float(53)),
+    Column('m_troncons_inventories_risque_fort', Float(53)),
+    Column('m_troncons_inventories_risque_secondaire', Float(53)),
+    Column('m_troncons_inventories_risque_faible', Float(53)),
+    Column('m_troncons_equipes', Float(53)),
+    Column('m_troncons_equipes_risque_fort', Float(53)),
+    Column('m_troncons_equipes_risque_secondaire', Float(53)),
+    Column('m_troncons_equipes_risque_faible', Float(53)),
+    Column('geom', Text),
+    schema='cables73'
+)
+class TVZonesSensibles(object):
+    pass
+mapper(TVZonesSensibles, t_v_zones_sensibles)
 
 class TInventairePoteauxErdf(Base):
     __tablename__ = 't_inventaire_poteaux_erdf'
@@ -655,7 +682,7 @@ class TZonesSensible(Base):
 
 t_v_equipements_poteaux = Table(
     'v_equipements_poteaux', metadata,
-    Column('id', Integer),
+    Column('id', Integer, primary_key=True),
     Column('id_inventaire_poteau_erdf', Integer),
     Column('nom_type_equipement_poteau', String),
     Column('id_nb_equipements', Integer),
@@ -664,6 +691,9 @@ t_v_equipements_poteaux = Table(
     Column('geom_json', String),
     schema='cables73'
 )
+class TVEquipementsPoteaux(object):
+    pass
+mapper(TVEquipementsPoteaux, t_v_equipements_poteaux)
 
 
 t_v_sites_nidification_zone_tampon = Table(
@@ -674,35 +704,6 @@ t_v_sites_nidification_zone_tampon = Table(
     Column('geom_json', Text),
     schema='cables73'
 )
-
-
-t_v_zones_sensibles = Table(
-    'v_zones_sensibles', metadata,
-    Column('id_zone_sensible', Integer, primary_key=True),
-    Column('nom_zone_sensible', String),
-    Column('niveau_sensibilite', Integer),
-    Column('nb_poteaux_inventories', BigInteger),
-    Column('nb_poteaux_inventories_risque_fort', BigInteger),
-    Column('nb_poteaux_inventories_risque_secondaire', BigInteger),
-    Column('nb_poteaux_inventories_risque_faible', BigInteger),
-    Column('nb_poteaux_equipes', BigInteger),
-    Column('nb_poteaux_equipes_risque_fort', BigInteger),
-    Column('nb_poteaux_equipes_risque_secondaire', BigInteger),
-    Column('nb_poteaux_equipes_risque_faible', BigInteger),
-    Column('m_troncons_inventories', Float(53)),
-    Column('m_troncons_inventories_risque_fort', Float(53)),
-    Column('m_troncons_inventories_risque_secondaire', Float(53)),
-    Column('m_troncons_inventories_risque_faible', Float(53)),
-    Column('m_troncons_equipes', Float(53)),
-    Column('m_troncons_equipes_risque_fort', Float(53)),
-    Column('m_troncons_equipes_risque_secondaire', Float(53)),
-    Column('m_troncons_equipes_risque_faible', Float(53)),
-    Column('geom', Text),
-    schema='cables73'
-)
-class TVZonesSensibles(object):
-    pass
-mapper(TVZonesSensibles, t_v_zones_sensibles)
 
 
 t_v_zones_sensibles_poteaux = Table(
