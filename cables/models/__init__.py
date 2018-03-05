@@ -562,7 +562,7 @@ class TInventairePoteauxErdf(Base):
     dico_classes_risque1 = relationship(u'DicoClassesRisque', primaryjoin='TInventairePoteauxErdf.id_dangerosite == DicoClassesRisque.id_classe_risque')
     dico_type_poteau_erdf = relationship(u'DicoTypePoteauErdf', primaryjoin='TInventairePoteauxErdf.id_type_poteau_erdf == DicoTypePoteauErdf.id_type_poteau_erdf')
     dico_type_poteau_erdf1 = relationship(u'DicoTypePoteauErdf', primaryjoin='TInventairePoteauxErdf.id_type_poteau_erdf_secondaire == DicoTypePoteauErdf.id_type_poteau_erdf')
-    t_zones_sensible = relationship(u'TZonesSensible')
+    t_zones_sensible = relationship(u'TZonesSensible', backref='poteaux')
 
 
 class TInventaireTronconsErdf(Base):
