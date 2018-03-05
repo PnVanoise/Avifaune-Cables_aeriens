@@ -17,9 +17,7 @@ def main(global_config, **settings):
     """
 
     session_factory = session_factory_from_settings(settings)
-
-    config = Configurator(settings=settings,
-                          session_factory=session_factory)
+    config = Configurator(settings=settings, session_factory=session_factory)
 
     config.include('pyramid_mako')
 
@@ -27,15 +25,11 @@ def main(global_config, **settings):
     engine = sqlalchemy.engine_from_config(settings, 'sqlalchemy.')
     sqlahelper.add_engine(engine)
 
-
-    # add the "geojson" and "csv" renderer
+    # add the "geojson" renderer
     config.add_renderer(name='csv', factory='cables.renderers.CSVRenderer')
 
     # add routes to the entry view class
-    config.add_route('export', '/export')
-
-    # we need to call scan() for the "home" and "countries"
-    # routes
+    config.add_route('export_zonessensibles', '/export/zonessensibles')
     config.scan()
 
     # add the static view (for static resources)

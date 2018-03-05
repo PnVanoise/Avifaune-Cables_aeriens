@@ -15,8 +15,8 @@ from cables.models import TEquipementsPoteauxErdf
 
 log = logging.getLogger(__name__)
 
-@view_config(route_name='export', renderer='csv')
-def export(request):
+@view_config(route_name='export_zonessensibles', renderer='csv')
+def export_zonessensibles(request):
     query = DBSession.query(TVZonesSensibles)
     if request.params.has_key('ids'):
         ids = map(int, request.params.get('ids').split(','))
