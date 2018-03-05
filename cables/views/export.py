@@ -17,8 +17,13 @@ log = logging.getLogger(__name__)
 
 @view_config(route_name='export', renderer='csv')
 def export(request):
-    rows = map(to_dict, DBSession.query(TVZonesSensibles).all())
-    rows.insert(0, (
+    query = DBSession.query(TVZonesSensibles)
+    if request.params.has_key('ids'):
+        ids = map(int, request.params.get('ids').split(','))
+        query = query.filter(TVZonesSensibles.id_zone_sensible.in_(ids))
+    rows = query.all()
+    entries = map(to_dict, rows)
+    entries.insert(0, (
         'id',
         'nom',
         'Nb poteaux risque fort',
@@ -37,7 +42,7 @@ def export(request):
         'Longueur troncons équipés risque secondaire',
         'Longueur troncons équipés risque',
         ))
-    return array(rows).transpose()
+    return array(entries).transpose()
 
 def to_dict(item):
     return (
