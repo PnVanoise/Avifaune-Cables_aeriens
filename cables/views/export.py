@@ -22,7 +22,7 @@ def export_zonessensibles(request):
         ids = map(int, request.params.get('ids').split(','))
         query = query.filter(TVZonesSensibles.id_zone_sensible.in_(ids))
     rows = query.all()
-    entries = map(to_dict, rows)
+    entries = map(zs_to_dict, rows)
     entries.insert(0, (
         'id',
         'nom',
@@ -47,7 +47,7 @@ def export_zonessensibles(request):
         ))
     return array(entries).transpose()
 
-def to_dict(item):
+def zs_to_dict(item):
     return (
         item.id_zone_sensible,
         item.nom_zone_sensible,
