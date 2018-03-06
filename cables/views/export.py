@@ -87,3 +87,59 @@ def get_len_troncons(item, year):
             filter(year_extract==year).\
             first()[0]
     return 0 if length is None else float(length)
+
+@view_config(route_name='export_communes', renderer='csv')
+def export_communes(request):
+    query = DBSession.query(TCommune)
+    if request.params.has_key('ids'):
+        ids = map(int, request.params.get('ids').split(','))
+        query = query.filter(TCommune.insee.in_(ids))
+    rows = query.all()
+    entries = map(commune_to_dict, rows)
+    entries.insert(0, (
+        'Code Insee',
+        'Commune',
+        'Nb poteaux risque fort',
+        'Nb poteaux risque secondaire',
+        'Nb poteaux risque',
+        'Nb poteaux équipés risque fort',
+        'Nb poteaux équipés risque secondaire',
+        'Nb poteaux équipés risque',
+        'Nb poteaux équipés en 2014',
+        'Nb poteaux équipés en 2015',
+        'Nb poteaux équipés en 2016',
+        'Longueur troncons risque élevé',
+        'Longueur troncons risque secondaire',
+        'Longueur troncons risque',
+        'Longueur troncons équipés risque élevé',
+        'Longueur troncons équipés risque secondaire',
+        'Longueur troncons équipés risque',
+        'Longueur troncons équipés en 2014',
+        'Longueur troncons équipés en 2015',
+        'Longueur troncons équipés en 2016',
+        ))
+    return array(entries).transpose()
+
+def commune_to_dict(item):
+    return (
+        item.insee,
+        item.nom_commune,
+        item.nb_poteaux_inventories_risque_fort,
+        item.nb_poteaux_inventories_risque_secondaire,
+        (item.nb_poteaux_inventories_risque_fort or 0) + (item.nb_poteaux_inventories_risque_secondaire or 0),
+        item.nb_poteaux_equipes_risque_fort,
+        item.nb_poteaux_equipes_risque_secondaire,
+        (item.nb_poteaux_equipes_risque_fort or 0) + (item.nb_poteaux_equipes_risque_secondaire or 0),
+        get_nb_poteaux(item, 2014),
+        get_nb_poteaux(item, 2015),
+        get_nb_poteaux(item, 2016),
+        item.m_troncons_inventories_risque_fort,
+        item.m_troncons_inventories_risque_secondaire,
+        (item.m_troncons_inventories_risque_fort or 0) + (item.m_troncons_inventories_risque_secondaire or 0),
+        item.m_troncons_equipes_risque_fort,
+        item.m_troncons_equipes_risque_secondaire,
+        (item.m_troncons_equipes_risque_fort or 0) + (item.m_troncons_equipes_risque_secondaire or 0),
+        get_len_troncons(item, 2014),
+        get_len_troncons(item, 2015),
+        get_len_troncons(item, 2016),
+        )
