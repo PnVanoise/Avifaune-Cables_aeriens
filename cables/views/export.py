@@ -23,33 +23,11 @@ def export_zonessensibles(request):
         query = query.filter(TVZonesSensibles.id_zone_sensible.in_(ids))
     rows = query.all()
     entries = map(zs_to_dict, rows)
-    entries.insert(0, (
-        'id',
-        'nom',
-        'Nb poteaux risque fort',
-        'Nb poteaux risque secondaire',
-        'Nb poteaux risque',
-        'Nb poteaux équipés risque fort',
-        'Nb poteaux équipés risque secondaire',
-        'Nb poteaux équipés risque',
-        'Nb poteaux équipés en 2014',
-        'Nb poteaux équipés en 2015',
-        'Nb poteaux équipés en 2016',
-        'Longueur troncons risque élevé',
-        'Longueur troncons risque secondaire',
-        'Longueur troncons risque',
-        'Longueur troncons équipés risque élevé',
-        'Longueur troncons équipés risque secondaire',
-        'Longueur troncons équipés risque',
-        'Longueur troncons équipés en 2014',
-        'Longueur troncons équipés en 2015',
-        'Longueur troncons équipés en 2016',
-        ))
+    add_header_row(entries, 'nom')
     return array(entries).transpose()
 
 def zs_to_dict(item):
     return (
-        item.id_zone_sensible,
         item.nom_zone_sensible,
         item.nb_poteaux_inventories_risque_fort,
         item.nb_poteaux_inventories_risque_secondaire,
@@ -96,33 +74,11 @@ def export_communes(request):
         query = query.filter(TCommune.insee.in_(ids))
     rows = query.all()
     entries = map(commune_to_dict, rows)
-    entries.insert(0, (
-        'Code Insee',
-        'Commune',
-        'Nb poteaux risque fort',
-        'Nb poteaux risque secondaire',
-        'Nb poteaux risque',
-        'Nb poteaux équipés risque fort',
-        'Nb poteaux équipés risque secondaire',
-        'Nb poteaux équipés risque',
-        'Nb poteaux équipés en 2014',
-        'Nb poteaux équipés en 2015',
-        'Nb poteaux équipés en 2016',
-        'Longueur troncons risque élevé',
-        'Longueur troncons risque secondaire',
-        'Longueur troncons risque',
-        'Longueur troncons équipés risque élevé',
-        'Longueur troncons équipés risque secondaire',
-        'Longueur troncons équipés risque',
-        'Longueur troncons équipés en 2014',
-        'Longueur troncons équipés en 2015',
-        'Longueur troncons équipés en 2016',
-        ))
+    add_header_row(entries, 'Commune')
     return array(entries).transpose()
 
 def commune_to_dict(item):
     return (
-        item.insee,
         item.nom_commune,
         item.nb_poteaux_inventories_risque_fort,
         item.nb_poteaux_inventories_risque_secondaire,
@@ -143,3 +99,26 @@ def commune_to_dict(item):
         get_len_troncons(item, 2015),
         get_len_troncons(item, 2016),
         )
+
+def add_header_row(entries, name):
+    entries.insert(0, (
+        name,
+        'Nb poteaux risque fort',
+        'Nb poteaux risque secondaire',
+        'Nb poteaux risque',
+        'Nb poteaux équipés risque fort',
+        'Nb poteaux équipés risque secondaire',
+        'Nb poteaux équipés risque',
+        'Nb poteaux équipés en 2014',
+        'Nb poteaux équipés en 2015',
+        'Nb poteaux équipés en 2016',
+        'Longueur troncons risque élevé',
+        'Longueur troncons risque secondaire',
+        'Longueur troncons risque',
+        'Longueur troncons équipés risque élevé',
+        'Longueur troncons équipés risque secondaire',
+        'Longueur troncons équipés risque',
+        'Longueur troncons équipés en 2014',
+        'Longueur troncons équipés en 2015',
+        'Longueur troncons équipés en 2016',
+        ))
