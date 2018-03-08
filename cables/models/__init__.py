@@ -557,12 +557,14 @@ class TInventairePoteauxErdf(Base):
     commune = Column(String(100))
     nb_equipements = Column(Integer)
     nb_photos = Column(Integer)
+    insee = Column(ForeignKey(u'cables73.t_communes.insee'))
 
     dico_classes_risque = relationship(u'DicoClassesRisque', primaryjoin='TInventairePoteauxErdf.id_attractivite == DicoClassesRisque.id_classe_risque')
     dico_classes_risque1 = relationship(u'DicoClassesRisque', primaryjoin='TInventairePoteauxErdf.id_dangerosite == DicoClassesRisque.id_classe_risque')
     dico_type_poteau_erdf = relationship(u'DicoTypePoteauErdf', primaryjoin='TInventairePoteauxErdf.id_type_poteau_erdf == DicoTypePoteauErdf.id_type_poteau_erdf')
     dico_type_poteau_erdf1 = relationship(u'DicoTypePoteauErdf', primaryjoin='TInventairePoteauxErdf.id_type_poteau_erdf_secondaire == DicoTypePoteauErdf.id_type_poteau_erdf')
     t_zones_sensible = relationship(u'TZonesSensible', backref='poteaux')
+    t_commune = relationship(u'TCommune')
 
 
 class TInventaireTronconsErdf(Base):
