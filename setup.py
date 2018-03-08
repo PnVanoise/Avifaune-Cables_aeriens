@@ -8,6 +8,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'pyramid_mako',
+    'pyramid_ipython',
     'pyramid',
     'psycopg2',
     'SQLAlchemy',
@@ -23,11 +24,14 @@ requires = [
     'pexpect',
     'pathlib2',
     'six',
-    'traitlets',
     'enum',
     'pgcli',
     'sqlacodegen',
     'numpy',
+    'ipdb',
+    'traitlets',
+    'ipython',
+    'enum',
 ]
 
 test_requires = requires.extend(['WebTest',
