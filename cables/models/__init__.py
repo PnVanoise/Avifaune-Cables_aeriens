@@ -15,7 +15,6 @@ DBSession = sqlahelper.get_session()
 
 class DicoAge(Base):
     __tablename__ = 'dico_age'
-    __table_args__ = {u'schema': 'cables73'}
 
     id_age = Column(Integer, primary_key=True)
     lib_age = Column(String(20))
@@ -23,7 +22,6 @@ class DicoAge(Base):
 
 class DicoCauseMortalite(Base):
     __tablename__ = 'dico_cause_mortalite'
-    __table_args__ = {u'schema': 'cables73'}
 
     id_cause_mortalite = Column(Integer, primary_key=True)
     lib_cause_mortalite = Column(String(20))
@@ -31,15 +29,13 @@ class DicoCauseMortalite(Base):
 
 class DicoClassesRisque(Base):
     __tablename__ = 'dico_classes_risque'
-    __table_args__ = {u'schema': 'cables73'}
 
-    id_classe_risque = Column(Integer, primary_key=True, server_default=text("nextval('cables73.dico_classes_risque_id_classe_risque_seq'::regclass)"))
+    id_classe_risque = Column(Integer, primary_key=True, server_default=text("nextval('dico_classes_risque_id_classe_risque_seq'::regclass)"))
     lib_classe_risque = Column(String(30))
 
 
 class DicoNbEquipement(Base):
     __tablename__ = 'dico_nb_equipements'
-    __table_args__ = {u'schema': 'cables73'}
 
     id_nb_equipements = Column(Integer, primary_key=True)
     nb_equipements = Column(Integer)
@@ -47,7 +43,6 @@ class DicoNbEquipement(Base):
 
 class DicoSexe(Base):
     __tablename__ = 'dico_sexe'
-    __table_args__ = {u'schema': 'cables73'}
 
     id_sexe = Column(Integer, primary_key=True)
     lib_sexe = Column(String(20))
@@ -55,7 +50,6 @@ class DicoSexe(Base):
 
 class DicoSource(Base):
     __tablename__ = 'dico_source'
-    __table_args__ = {u'schema': 'cables73'}
 
     id_source = Column(Integer, primary_key=True)
     lib_source = Column(String(20))
@@ -63,7 +57,6 @@ class DicoSource(Base):
 
 class DicoTypeEquipementPoteau(Base):
     __tablename__ = 'dico_type_equipement_poteau'
-    __table_args__ = {u'schema': 'cables73'}
 
     id_type_equipement_poteau = Column(Integer, primary_key=True)
     nom_type_equipement_poteau = Column(String)
@@ -71,7 +64,6 @@ class DicoTypeEquipementPoteau(Base):
 
 class DicoTypeEquipementTroncon(Base):
     __tablename__ = 'dico_type_equipement_troncon'
-    __table_args__ = {u'schema': 'cables73'}
 
     id_type_equipement_troncon = Column(Integer, primary_key=True)
     nom_type_equipement_troncon = Column(String)
@@ -79,7 +71,6 @@ class DicoTypeEquipementTroncon(Base):
 
 class DicoTypePoteauErdf(Base):
     __tablename__ = 'dico_type_poteau_erdf'
-    __table_args__ = {u'schema': 'cables73'}
 
     id_type_poteau_erdf = Column(Integer, primary_key=True)
     lib_type_poteau_erdf = Column(String)
@@ -90,11 +81,10 @@ class ErdfAppareilCoupure(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('cables73.erdf_appareil_coupure_id_seq'::regclass)"))
+    id = Column(Integer, primary_key=True, server_default=text("nextval('erdf_appareil_coupure_id_seq'::regclass)"))
     AUTOMATISM = Column(String(62))
     AUTOMATIS1 = Column(String(62))
     AUTOMATIS2 = Column(String(62))
@@ -114,11 +104,10 @@ class ErdfConnexionAerienne(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('cables73.erdf_connexion_aerienne_id_seq'::regclass)"))
+    id = Column(Integer, primary_key=True, server_default=text("nextval('erdf_connexion_aerienne_id_seq'::regclass)"))
     POTEAU_HTA = Column(String(32))
     STATUT = Column(String(12))
     TYPE_DE_CO = Column(String(40))
@@ -135,11 +124,10 @@ class ErdfParafoudre(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('cables73.erdf_parafoudre_id_seq'::regclass)"))
+    id = Column(Integer, primary_key=True, server_default=text("nextval('erdf_parafoudre_id_seq'::regclass)"))
     POTEAU_HTA = Column(String(32))
     STATUT = Column(String(12))
     TYPE = Column(String(32))
@@ -156,11 +144,10 @@ class ErdfPosteElectrique(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('cables73.erdf_poste_electrique_id_seq'::regclass)"))
+    id = Column(Integer, primary_key=True, server_default=text("nextval('erdf_poste_electrique_id_seq'::regclass)"))
     FONCTION_P = Column(String(40))
     NOM_DU_POS = Column(String(32))
     POTEAU_HTA = Column(String(32))
@@ -179,11 +166,10 @@ class ErdfRemonteeAerosout(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('cables73.erdf_remontee_aerosout_id_seq'::regclass)"))
+    id = Column(Integer, primary_key=True, server_default=text("nextval('erdf_remontee_aerosout_id_seq'::regclass)"))
     APPAREIL_D = Column(String(32))
     CONNEXION_ = Column(String(32))
     HAUTEUR_PO = Column(Float(53))
@@ -205,8 +191,7 @@ class ErdfTronconAerien(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'LINESTRING'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
     STATUT = Column(String(12))
@@ -216,7 +201,7 @@ class ErdfTronconAerien(Base):
     COMMENTAIR = Column(String(30))
     geom = Column(NullType, index=True)
     ID_SIG = Column(Integer)
-    id = Column(Integer, primary_key=True, server_default=text("nextval('cables73.erdf_troncon_aerien_id_seq'::regclass)"))
+    id = Column(Integer, primary_key=True, server_default=text("nextval('erdf_troncon_aerien_id_seq'::regclass)"))
     geom_json = Column(String)
 
 
@@ -224,8 +209,7 @@ class OgmCablesRemonteesMecanique(Base):
     __tablename__ = 'ogm_cables_remontees_mecaniques'
     __table_args__ = (
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
     geom = Column(NullType, index=True)
@@ -245,8 +229,7 @@ class OgmDomainesSkiable(Base):
     __tablename__ = 'ogm_domaines_skiables'
     __table_args__ = (
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
     geom = Column(NullType, index=True)
@@ -271,8 +254,7 @@ class OgmTronconsDangereux(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'LINESTRING'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
     geom = Column(NullType, index=True)
@@ -297,8 +279,7 @@ class OgmTronconsVisualise(Base):
     __tablename__ = 'ogm_troncons_visualises'
     __table_args__ = (
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
     geom = Column(NullType, index=True)
@@ -321,8 +302,7 @@ class OgmTronconsVisualisesDangereux(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'LINESTRING'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
     geom = Column(NullType, index=True)
@@ -349,11 +329,10 @@ class RteLigne(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'LINESTRING'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id_rte_ligne = Column(Integer, primary_key=True, server_default=text("nextval('cables73.rte_lignes_id_rte_ligne_seq'::regclass)"))
+    id_rte_ligne = Column(Integer, primary_key=True, server_default=text("nextval('rte_lignes_id_rte_ligne_seq'::regclass)"))
     U_MAX = Column(String(20))
     CONFIG = Column(String)
     TERNE_EX = Column(Integer)
@@ -369,11 +348,10 @@ class RtePoste(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id_rte_poste = Column(Integer, primary_key=True, server_default=text("nextval('cables73.rte_postes_id_rte_poste_seq'::regclass)"))
+    id_rte_poste = Column(Integer, primary_key=True, server_default=text("nextval('rte_postes_id_rte_poste_seq'::regclass)"))
     U_MAX = Column(String(20))
     LIBELLE = Column(String(64))
     LIB_SUIT = Column(String(64))
@@ -386,11 +364,10 @@ class RtePoteaux(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id_rte_poteaux = Column(Integer, primary_key=True, server_default=text("nextval('cables73.rte_poteaux_id_rte_poteaux_seq'::regclass)"))
+    id_rte_poteaux = Column(Integer, primary_key=True, server_default=text("nextval('rte_poteaux_id_rte_poteaux_seq'::regclass)"))
     U_MAX = Column(String(20))
     NB_TERNE = Column(Integer)
     geom = Column(NullType, index=True)
@@ -402,11 +379,10 @@ class TAxesMigratoire(Base):
     __table_args__ = (
         CheckConstraint(u"((public.geometrytype(geom) = 'POLYGON'::text) OR (public.geometrytype(geom) = 'MULTIPOLYGON'::text)) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id_axe_migratoire = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_axes_migratoires_id_axe_migratoire_seq'::regclass)"))
+    id_axe_migratoire = Column(Integer, primary_key=True, server_default=text("nextval('t_axes_migratoires_id_axe_migratoire_seq'::regclass)"))
     nom_axe_migratoire = Column(String(100))
     migration = Column(Integer)
     source = Column(String(100))
@@ -420,14 +396,13 @@ class TCasMortalite(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id_cas_mortalite = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_cas_mortalite_id_cas_mortalite_seq'::regclass)"))
-    id_espece = Column(ForeignKey(u'cables73.t_especes.id_espece'), nullable=False)
+    id_cas_mortalite = Column(Integer, primary_key=True, server_default=text("nextval('t_cas_mortalite_id_cas_mortalite_seq'::regclass)"))
+    id_espece = Column(ForeignKey(u't_especes.id_espece'), nullable=False)
     source = Column(String(100))
-    id_cause_mortalite = Column(ForeignKey(u'cables73.dico_cause_mortalite.id_cause_mortalite'), nullable=False)
+    id_cause_mortalite = Column(ForeignKey(u'dico_cause_mortalite.id_cause_mortalite'), nullable=False)
     nb_cas = Column(Integer)
     sexe = Column(String(30))
     age = Column(String(30))
@@ -443,8 +418,7 @@ class TCommune(Base):
     __tablename__ = 't_communes'
     __table_args__ = (
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
     insee = Column(Integer, primary_key=True)
@@ -455,15 +429,14 @@ class TCommune(Base):
 
 class TEquipementsPoteauxErdf(Base):
     __tablename__ = 't_equipements_poteaux_erdf'
-    __table_args__ = {u'schema': 'cables73'}
 
-    id_equipement_poteau_erdf = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_equipements_poteaux_erdf_id_equipement_poteau_erdf_seq'::regclass)"))
-    id_inventaire_poteau_erdf = Column(ForeignKey(u'cables73.t_inventaire_poteaux_erdf.id_inventaire_poteau_erdf', ondelete=u'CASCADE', onupdate=u'CASCADE'))
-    id_type_equipement_poteau = Column(ForeignKey(u'cables73.dico_type_equipement_poteau.id_type_equipement_poteau'))
+    id_equipement_poteau_erdf = Column(Integer, primary_key=True, server_default=text("nextval('t_equipements_poteaux_erdf_id_equipement_poteau_erdf_seq'::regclass)"))
+    id_inventaire_poteau_erdf = Column(ForeignKey(u't_inventaire_poteaux_erdf.id_inventaire_poteau_erdf', ondelete=u'CASCADE', onupdate=u'CASCADE'))
+    id_type_equipement_poteau = Column(ForeignKey(u'dico_type_equipement_poteau.id_type_equipement_poteau'))
     date_equipement = Column(Date)
     login_saisie = Column(String(25))
     mis_en_place = Column(Boolean, server_default=text("false"))
-    id_nb_equipements = Column(ForeignKey(u'cables73.dico_nb_equipements.id_nb_equipements'))
+    id_nb_equipements = Column(ForeignKey(u'dico_nb_equipements.id_nb_equipements'))
 
     t_inventaire_poteaux_erdf = relationship(u'TInventairePoteauxErdf')
     dico_nb_equipement = relationship(u'DicoNbEquipement')
@@ -475,13 +448,12 @@ class TEquipementsTronconsErdf(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'LINESTRING'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id_equipement_troncon_erdf = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_equipements_troncons_erdf_id_equipement_troncon_erdf_seq'::regclass)"))
-    id_inventaire_troncon_erdf = Column(ForeignKey(u'cables73.t_inventaire_troncons_erdf.id_inventaire_troncon_erdf', ondelete=u'CASCADE', onupdate=u'CASCADE'))
-    id_type_equipement_troncon = Column(ForeignKey(u'cables73.dico_type_equipement_troncon.id_type_equipement_troncon'))
+    id_equipement_troncon_erdf = Column(Integer, primary_key=True, server_default=text("nextval('t_equipements_troncons_erdf_id_equipement_troncon_erdf_seq'::regclass)"))
+    id_inventaire_troncon_erdf = Column(ForeignKey(u't_inventaire_troncons_erdf.id_inventaire_troncon_erdf', ondelete=u'CASCADE', onupdate=u'CASCADE'))
+    id_type_equipement_troncon = Column(ForeignKey(u'dico_type_equipement_troncon.id_type_equipement_troncon'))
     date_equipement_troncon = Column(Date)
     geom = Column(NullType, index=True)
     login_saisie = Column(String(25))
@@ -493,9 +465,8 @@ class TEquipementsTronconsErdf(Base):
 
 class TEspece(Base):
     __tablename__ = 't_especes'
-    __table_args__ = {u'schema': 'cables73'}
 
-    id_espece = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_especes_id_espece_seq'::regclass)"))
+    id_espece = Column(Integer, primary_key=True, server_default=text("nextval('t_especes_id_espece_seq'::regclass)"))
     nom_espece = Column(String(100), nullable=False)
     taille_zone_tampon = Column(Integer)
     code_couleur = Column(String(20))
@@ -521,8 +492,7 @@ t_v_zones_sensibles = Table(
     Column('m_troncons_equipes_risque_fort', Float(53)),
     Column('m_troncons_equipes_risque_secondaire', Float(53)),
     Column('m_troncons_equipes_risque_faible', Float(53)),
-    Column('geom', Text),
-    schema='cables73'
+    Column('geom', Text)
 )
 class TVZonesSensibles(object):
     pass
@@ -534,19 +504,18 @@ class TInventairePoteauxErdf(Base):
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
         CheckConstraint(u'public.st_srid(geom) = 4326'),
-        Index('t_inventaire_poteaux_erdf_index_id', 'id_type_poteau_erdf', 'id_type_poteau_erdf_secondaire', 'id_zone_sensible', 'id_attractivite', 'id_dangerosite'),
-        {u'schema': 'cables73'}
+        Index('t_inventaire_poteaux_erdf_index_id', 'id_type_poteau_erdf', 'id_type_poteau_erdf_secondaire', 'id_zone_sensible', 'id_attractivite', 'id_dangerosite')
     )
 
-    id_inventaire_poteau_erdf = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_inventaire_poteaux_erdf_id_inventaire_poteau_erdf_seq'::regclass)"))
+    id_inventaire_poteau_erdf = Column(Integer, primary_key=True, server_default=text("nextval('t_inventaire_poteaux_erdf_id_inventaire_poteau_erdf_seq'::regclass)"))
     date_inventaire = Column(Date)
-    id_type_poteau_erdf = Column(ForeignKey(u'cables73.dico_type_poteau_erdf.id_type_poteau_erdf'))
-    id_type_poteau_erdf_secondaire = Column(ForeignKey(u'cables73.dico_type_poteau_erdf.id_type_poteau_erdf'))
+    id_type_poteau_erdf = Column(ForeignKey(u'dico_type_poteau_erdf.id_type_poteau_erdf'))
+    id_type_poteau_erdf_secondaire = Column(ForeignKey(u'dico_type_poteau_erdf.id_type_poteau_erdf'))
     remarques = Column(String)
-    id_zone_sensible = Column(ForeignKey(u'cables73.t_zones_sensibles.id_zone_sensible'))
+    id_zone_sensible = Column(ForeignKey(u't_zones_sensibles.id_zone_sensible'))
     etat_poteau = Column(String)
-    id_attractivite = Column(ForeignKey(u'cables73.dico_classes_risque.id_classe_risque'))
-    id_dangerosite = Column(ForeignKey(u'cables73.dico_classes_risque.id_classe_risque'))
+    id_attractivite = Column(ForeignKey(u'dico_classes_risque.id_classe_risque'))
+    id_dangerosite = Column(ForeignKey(u'dico_classes_risque.id_classe_risque'))
     neutralisation_prevue_isolation = Column(Boolean)
     neutralisation_prevue_dissuasion = Column(Boolean)
     neutralisation_prevue_attraction = Column(Boolean)
@@ -557,7 +526,7 @@ class TInventairePoteauxErdf(Base):
     commune = Column(String(100))
     nb_equipements = Column(Integer)
     nb_photos = Column(Integer)
-    insee = Column(ForeignKey(u'cables73.t_communes.insee'))
+    insee = Column(ForeignKey(u't_communes.insee'))
 
     dico_classes_risque = relationship(u'DicoClassesRisque', primaryjoin='TInventairePoteauxErdf.id_attractivite == DicoClassesRisque.id_classe_risque')
     dico_classes_risque1 = relationship(u'DicoClassesRisque', primaryjoin='TInventairePoteauxErdf.id_dangerosite == DicoClassesRisque.id_classe_risque')
@@ -573,19 +542,18 @@ class TInventaireTronconsErdf(Base):
         CheckConstraint(u"(public.geometrytype(geom) = 'LINESTRING'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
         CheckConstraint(u'public.st_srid(geom) = 4326'),
-        Index('t_inventaire_troncons_erdf_index_id', 'id_zone_sensible', 'id_risque_deplacement', 'id_risque_integration_topo', 'id_risque_integration_vegetation', 'id_risque_integration_bati'),
-        {u'schema': 'cables73'}
+        Index('t_inventaire_troncons_erdf_index_id', 'id_zone_sensible', 'id_risque_deplacement', 'id_risque_integration_topo', 'id_risque_integration_vegetation', 'id_risque_integration_bati')
     )
 
-    id_inventaire_troncon_erdf = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_inventaire_troncons_erdf_id_inventaire_troncon_erdf_seq'::regclass)"))
+    id_inventaire_troncon_erdf = Column(Integer, primary_key=True, server_default=text("nextval('t_inventaire_troncons_erdf_id_inventaire_troncon_erdf_seq'::regclass)"))
     date_inventaire = Column(Date)
-    id_zone_sensible = Column(ForeignKey(u'cables73.t_zones_sensibles.id_zone_sensible'))
+    id_zone_sensible = Column(ForeignKey(u't_zones_sensibles.id_zone_sensible'))
     geom = Column(NullType, index=True)
     remarques = Column(String)
-    id_risque_deplacement = Column(ForeignKey(u'cables73.dico_classes_risque.id_classe_risque'))
-    id_risque_integration_topo = Column(ForeignKey(u'cables73.dico_classes_risque.id_classe_risque'))
-    id_risque_integration_vegetation = Column(ForeignKey(u'cables73.dico_classes_risque.id_classe_risque'))
-    id_risque_integration_bati = Column(ForeignKey(u'cables73.dico_classes_risque.id_classe_risque'))
+    id_risque_deplacement = Column(ForeignKey(u'dico_classes_risque.id_classe_risque'))
+    id_risque_integration_topo = Column(ForeignKey(u'dico_classes_risque.id_classe_risque'))
+    id_risque_integration_vegetation = Column(ForeignKey(u'dico_classes_risque.id_classe_risque'))
+    id_risque_integration_bati = Column(ForeignKey(u'dico_classes_risque.id_classe_risque'))
     deja_neutralise = Column(Boolean)
     geom_json = Column(String)
     risque_troncon = Column(String(20))
@@ -605,12 +573,11 @@ class TObservation(Base):
     __tablename__ = 't_observations'
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
-        CheckConstraint(u'public.st_ndims(geom) = 2'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_ndims(geom) = 2')
     )
 
-    id_observation = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_observations_id_observation_seq'::regclass)"))
-    id_espece = Column(ForeignKey(u'cables73.t_especes.id_espece', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
+    id_observation = Column(Integer, primary_key=True, server_default=text("nextval('t_observations_id_observation_seq'::regclass)"))
+    id_espece = Column(ForeignKey(u't_especes.id_espece', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
     lieu = Column(String(100))
     commentaires = Column(String)
     precision_loc = Column(String(50))
@@ -625,10 +592,9 @@ class TObservation(Base):
 
 class TPhotosPoteauxErdf(Base):
     __tablename__ = 't_photos_poteaux_erdf'
-    __table_args__ = {u'schema': 'cables73'}
 
-    id_photo_poteau_erdf = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_photos_poteaux_erdf_id_photo_poteau_erdf_seq'::regclass)"))
-    id_inventaire_poteau_erdf = Column(ForeignKey(u'cables73.t_inventaire_poteaux_erdf.id_inventaire_poteau_erdf', ondelete=u'CASCADE', onupdate=u'CASCADE'))
+    id_photo_poteau_erdf = Column(Integer, primary_key=True, server_default=text("nextval('t_photos_poteaux_erdf_id_photo_poteau_erdf_seq'::regclass)"))
+    id_inventaire_poteau_erdf = Column(ForeignKey(u't_inventaire_poteaux_erdf.id_inventaire_poteau_erdf', ondelete=u'CASCADE', onupdate=u'CASCADE'))
     chemin_photo = Column(String)
     commentaire = Column(String)
     neutralise = Column(Boolean)
@@ -639,10 +605,9 @@ class TPhotosPoteauxErdf(Base):
 
 class TPhotosTronconsErdf(Base):
     __tablename__ = 't_photos_troncons_erdf'
-    __table_args__ = {u'schema': 'cables73'}
 
-    id_photo_troncon_erdf = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_photos_troncons_erdf_id_photo_troncon_erdf_seq'::regclass)"))
-    id_inventaire_troncon_erdf = Column(ForeignKey(u'cables73.t_inventaire_troncons_erdf.id_inventaire_troncon_erdf', ondelete=u'CASCADE', onupdate=u'CASCADE'))
+    id_photo_troncon_erdf = Column(Integer, primary_key=True, server_default=text("nextval('t_photos_troncons_erdf_id_photo_troncon_erdf_seq'::regclass)"))
+    id_inventaire_troncon_erdf = Column(ForeignKey(u't_inventaire_troncons_erdf.id_inventaire_troncon_erdf', ondelete=u'CASCADE', onupdate=u'CASCADE'))
     chemin_photo = Column(String)
     commentaire = Column(String)
     neutralise = Column(Boolean)
@@ -656,12 +621,11 @@ class TSitesNidification(Base):
     __table_args__ = (
         CheckConstraint(u"(public.geometrytype(geom) = 'POINT'::text) OR (geom IS NULL)"),
         CheckConstraint(u'public.st_ndims(geom) = 2'),
-        CheckConstraint(u'public.st_srid(geom) = 4326'),
-        {u'schema': 'cables73'}
+        CheckConstraint(u'public.st_srid(geom) = 4326')
     )
 
-    id_site_nidification = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_sites_nidification_id_site_nidification_seq'::regclass)"))
-    id_espece = Column(ForeignKey(u'cables73.t_especes.id_espece', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
+    id_site_nidification = Column(Integer, primary_key=True, server_default=text("nextval('t_sites_nidification_id_site_nidification_seq'::regclass)"))
+    id_espece = Column(ForeignKey(u't_especes.id_espece', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
     lieu = Column(String(100))
     nidification_10_ans = Column(Boolean)
     commentaires = Column(String)
@@ -675,9 +639,8 @@ class TSitesNidification(Base):
 
 class TZonesSensible(Base):
     __tablename__ = 't_zones_sensibles'
-    __table_args__ = {u'schema': 'cables73'}
 
-    id_zone_sensible = Column(Integer, primary_key=True, server_default=text("nextval('cables73.t_zone_sensible_id_zone_sensible_seq'::regclass)"))
+    id_zone_sensible = Column(Integer, primary_key=True, server_default=text("nextval('t_zone_sensible_id_zone_sensible_seq'::regclass)"))
     nom_zone_sensible = Column(String)
     niveau_sensibilite = Column(Integer)
 
@@ -690,8 +653,7 @@ t_v_equipements_poteaux = Table(
     Column('id_nb_equipements', Integer),
     Column('mis_en_place', Boolean),
     Column('date_equipement', Date),
-    Column('geom_json', String),
-    schema='cables73'
+    Column('geom_json', String)
 )
 class TVEquipementsPoteaux(object):
     pass
@@ -703,8 +665,7 @@ t_v_sites_nidification_zone_tampon = Table(
     Column('id_espece', Integer),
     Column('nom_espece', String(100)),
     Column('geom', NullType),
-    Column('geom_json', Text),
-    schema='cables73'
+    Column('geom_json', Text)
 )
 
 
@@ -719,8 +680,7 @@ t_v_zones_sensibles_poteaux = Table(
     Column('nb_poteaux_equipes_risque_fort', BigInteger),
     Column('nb_poteaux_equipes_risque_secondaire', BigInteger),
     Column('nb_poteaux_equipes_risque_faible', BigInteger),
-    Column('geom', NullType),
-    schema='cables73'
+    Column('geom', NullType)
 )
 
 
@@ -735,6 +695,5 @@ t_v_zones_sensibles_troncons = Table(
     Column('m_troncons_equipes_risque_fort', Float(53)),
     Column('m_troncons_equipes_risque_secondaire', Float(53)),
     Column('m_troncons_equipes_risque_faible', Float(53)),
-    Column('geom', NullType),
-    schema='cables73'
+    Column('geom', NullType)
 )
