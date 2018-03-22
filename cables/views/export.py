@@ -23,6 +23,7 @@ years_t = ()
 @view_config(route_name='export_zonessensibles', renderer='csv')
 def export_zonessensibles(request):
     global years_p, years_t
+    DBSession.execute('SET search_path TO cables73, public')
     query = DBSession.query(TVZonesSensibles)
     if request.params.has_key('ids'):
         ids = map(int, request.params.get('ids').split(','))
