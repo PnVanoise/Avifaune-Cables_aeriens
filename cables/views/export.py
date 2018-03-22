@@ -28,11 +28,10 @@ def export_zonessensibles(request):
     if request.params.has_key('ids'):
         ids = map(int, request.params.get('ids').split(','))
         query = query.filter(TVZonesSensibles.id_zone_sensible.in_(ids))
-    rows = query.all()
     to_int = lambda x: int(x[0])
     years_p = tuple(sorted(map(to_int, DBSession.query(year_extract_p).distinct().all())))
     years_t = tuple(sorted(map(to_int, DBSession.query(year_extract_t).distinct().all())))
-    entries = map(zs_to_dict, rows)
+    entries = map(zs_to_dict, query)
     add_header_row(entries, 'nom')
     return array(entries).transpose()
 
