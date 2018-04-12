@@ -2,7 +2,7 @@
 import logging
 import sqlahelper
 
-from sqlalchemy import BigInteger, Boolean, CheckConstraint, Column, Date, DateTime, Float, ForeignKey, Index, Integer, String, Table, Text, text
+from sqlalchemy import BigInteger, Boolean, CheckConstraint, Column, Date, DateTime, Float, ForeignKey, Index, Integer, String, Table, Text, text, Unicode
 from sqlalchemy.sql.sqltypes import NullType
 from sqlalchemy.orm import relationship, mapper
 from sqlalchemy.ext.declarative import declarative_base
@@ -438,7 +438,7 @@ class TEquipementsPoteauxErdf(Base):
     mis_en_place = Column(Boolean, server_default=text("false"))
     id_nb_equipements = Column(ForeignKey(u'dico_nb_equipements.id_nb_equipements'))
 
-    t_inventaire_poteaux_erdf = relationship(u'TInventairePoteauxErdf')
+    t_inventaire_poteaux_erdf = relationship(u'TInventairePoteauxErdf', backref="equipements")
     dico_nb_equipement = relationship(u'DicoNbEquipement')
     dico_type_equipement_poteau = relationship(u'DicoTypeEquipementPoteau')
 
@@ -522,7 +522,7 @@ class TInventairePoteauxErdf(Base):
     deja_neutralise = Column(Boolean)
     geom = Column(NullType, index=True)
     geom_json = Column(String)
-    risque_poteau = Column(String(20))
+    risque_poteau = Column(Unicode(20))
     commune = Column(String(100))
     nb_equipements = Column(Integer)
     nb_photos = Column(Integer)
@@ -533,7 +533,7 @@ class TInventairePoteauxErdf(Base):
     dico_type_poteau_erdf = relationship(u'DicoTypePoteauErdf', primaryjoin='TInventairePoteauxErdf.id_type_poteau_erdf == DicoTypePoteauErdf.id_type_poteau_erdf')
     dico_type_poteau_erdf1 = relationship(u'DicoTypePoteauErdf', primaryjoin='TInventairePoteauxErdf.id_type_poteau_erdf_secondaire == DicoTypePoteauErdf.id_type_poteau_erdf')
     t_zones_sensible = relationship(u'TZonesSensible', backref='poteaux')
-    t_commune = relationship(u'TCommune')
+    t_commune = relationship(u'TCommune', backref='poteaux')
 
 
 class TInventaireTronconsErdf(Base):
