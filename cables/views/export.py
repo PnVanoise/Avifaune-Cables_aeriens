@@ -24,6 +24,8 @@ R_HIG = u'Risque élevé'
 R_SEC = u'Risque secondaire'
 R_LOW = u'Peu ou pas de risque'
 
+to_int = lambda x: int(x[0])
+
 @view_config(route_name='export_zonessensibles', renderer='csv')
 def export_zonessensibles(request):
     global years_p, years_t
@@ -32,7 +34,6 @@ def export_zonessensibles(request):
     if request.params.has_key('ids'):
         ids = map(int, request.params.get('ids').split(','))
         query = query.filter(TVZonesSensibles.id_zone_sensible.in_(ids))
-    to_int = lambda x: int(x[0])
     years_p = tuple(sorted(map(to_int, DBSession.query(year_extract_p).distinct().all())))
     years_t = tuple(sorted(map(to_int, DBSession.query(year_extract_t).distinct().all())))
     entries = map(zs_to_dict, query)
