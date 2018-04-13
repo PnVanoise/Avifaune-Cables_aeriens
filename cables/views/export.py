@@ -77,7 +77,7 @@ def get_len_troncons(item, year, qfilter=None):
             filter(qfilter).\
             filter(year_extract_t==year).\
             first()[0]
-    return 0 if length is None else float(length)
+    return 0 if length is None else int(length)
 
 @view_config(route_name='export_communes', renderer='csv')
 def export_communes(request):
