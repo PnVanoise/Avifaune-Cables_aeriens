@@ -60,17 +60,21 @@ def zs_to_dict(item):
     troncons_year = tuple( get_len_troncons(item, year) for year in years_t )
     return poteaux + poteaux_year + troncons + troncons_year
 
-def get_nb_poteaux(item, year):
+def get_nb_poteaux(item, year, qfilter=None):
+    if qfilter is None:
+        qfilter = TInventairePoteauxErdf.id_zone_sensible==item.id_zone_sensible
     return DBSession.query(TInventairePoteauxErdf).\
             join(TEquipementsPoteauxErdf).\
-            filter(TInventairePoteauxErdf.id_zone_sensible==item.id_zone_sensible).\
+            filter(qfilter).\
             filter(year_extract_p==year).\
             count()
 
-def get_len_troncons(item, year):
+def get_len_troncons(item, year, qfilter=None):
+    if qfilter is None:
+        qfilter = TInventaireTronconsErdf.id_zone_sensible==item.id_zone_sensible
     length = DBSession.query(func.sum(TInventaireTronconsErdf.lg_equipee)).\
             join(TEquipementsTronconsErdf).\
-            filter(TInventaireTronconsErdf.id_zone_sensible==item.id_zone_sensible).\
+            filter(qfilter).\
             filter(year_extract_t==year).\
             first()[0]
     return 0 if length is None else float(length)
@@ -95,39 +99,29 @@ def commune_to_dict(item):
     sec = len(filter(poteaux_filter(R_SEC), item.poteaux))
     hig_eq = len(filter(poteaux_filter(R_HIG, equipements=True), item.poteaux))
     sec_eq = len(filter(poteaux_filter(R_SEC, equipements=True), item.poteaux))
-    return (
+    years_p = tuple(sorted(map(to_int, DBSession.query(year_extract_p).distinct().all())))
+    years_t = tuple(sorted(map(to_int, DBSession.query(year_extract_t).distinct().all())))
+    qfilter = TInventairePoteauxErdf.insee == item.insee
+
+    poteaux = (
         item.nom_commune,
         hig,
         sec,
         hig + sec,
         hig_eq,
         sec_eq,
-        hig_eq + sec_eq,
+        hig_eq + sec_eq)
+    poteaux_year = tuple( get_nb_poteaux(item, year, qfilter) for year in years_p )
+    troncons = (
        '',
        '',
        '',
        '',
        '',
        '',
-       '',
-       '',
-       '',
-       '',
-       '',
-       '',
-        # get_nb_poteaux(item, 2014),
-        # get_nb_poteaux(item, 2015),
-        # get_nb_poteaux(item, 2016),
-        # item.m_troncons_inventories_risque_fort,
-        # item.m_troncons_inventories_risque_secondaire,
-        # (item.m_troncons_inventories_risque_fort or 0) + (item.m_troncons_inventories_risque_secondaire or 0),
-        # item.m_troncons_equipes_risque_fort,
-        # item.m_troncons_equipes_risque_secondaire,
-        # (item.m_troncons_equipes_risque_fort or 0) + (item.m_troncons_equipes_risque_secondaire or 0),
-        # get_len_troncons(item, 2014),
-        # get_len_troncons(item, 2015),
-        # get_len_troncons(item, 2016),
-        )
+       '')
+    troncons_year = tuple( get_len_troncons(item, year, qfilter) for year in years_t )
+    return poteaux + poteaux_year + troncons + troncons_year
 
 def add_header_row(entries, name):
     labels_years_p = tuple('Nb poteaux équipés en %s' % year for year in years_p)
