@@ -81,7 +81,10 @@ def get_len_troncons(item, year, qfilter=None):
 
 @view_config(route_name='export_communes', renderer='csv')
 def export_communes(request):
+    global years_p, years_t
     DBSession.execute('SET search_path TO cables73, public')
+    years_p = tuple(sorted(map(to_int, DBSession.query(year_extract_p).distinct().all())))
+    years_t = tuple(sorted(map(to_int, DBSession.query(year_extract_t).distinct().all())))
     query = DBSession.query(TCommune) \
         .join(TInventairePoteauxErdf) \
         .join(TEquipementsPoteauxErdf)
@@ -99,18 +102,11 @@ def commune_to_dict(item):
     sec = len(filter(poteaux_filter(R_SEC), item.poteaux))
     hig_eq = len(filter(poteaux_filter(R_HIG, equipements=True), item.poteaux))
     sec_eq = len(filter(poteaux_filter(R_SEC, equipements=True), item.poteaux))
-    years_p = tuple(sorted(map(to_int, DBSession.query(year_extract_p).distinct().all())))
-    years_t = tuple(sorted(map(to_int, DBSession.query(year_extract_t).distinct().all())))
     qfilter = TInventairePoteauxErdf.insee == item.insee
 
-    poteaux = (
-        item.nom_commune,
-        hig,
-        sec,
-        hig + sec,
-        hig_eq,
-        sec_eq,
-        hig_eq + sec_eq)
+    poteaux = (item.nom_commune,
+        hig, sec, hig + sec,
+        hig_eq, sec_eq, hig_eq + sec_eq)
     poteaux_year = tuple( get_nb_poteaux(item, year, qfilter) for year in years_p )
     troncons = (
        '',
