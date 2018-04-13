@@ -9,7 +9,7 @@ from sqlalchemy.sql import func
 from numpy import array
 
 from cables.models import DBSession
-from cables.models import TVZonesSensibles, \
+from cables.models import TVZonesSensibles, TCommune, \
         TInventairePoteauxErdf, TEquipementsPoteauxErdf, \
         TInventaireTronconsErdf, TEquipementsTronconsErdf
 
@@ -19,6 +19,10 @@ year_extract_p = extract('year', TEquipementsPoteauxErdf.date_equipement)
 year_extract_t = extract('year', TEquipementsTronconsErdf.date_equipement_troncon)
 years_p = ()
 years_t = ()
+
+R_HIG = u'Risque élevé'
+R_SEC = u'Risque secondaire'
+R_LOW = u'Peu ou pas de risque'
 
 @view_config(route_name='export_zonessensibles', renderer='csv')
 def export_zonessensibles(request):
@@ -72,36 +76,56 @@ def get_len_troncons(item, year):
 
 @view_config(route_name='export_communes', renderer='csv')
 def export_communes(request):
-    query = DBSession.query(TCommune)
-    if request.params.has_key('ids'):
-        ids = map(int, request.params.get('ids').split(','))
-        query = query.filter(TCommune.insee.in_(ids))
-    rows = query.all()
-    entries = map(commune_to_dict, rows)
+    DBSession.execute('SET search_path TO cables73, public')
+    query = DBSession.query(TCommune) \
+        .join(TInventairePoteauxErdf) \
+        .join(TEquipementsPoteauxErdf)
+    entries = map(commune_to_dict, query)
     add_header_row(entries, 'Commune')
     return array(entries).transpose()
 
+def poteaux_filter(value, equipements=False):
+  if equipements:
+      return lambda x: x.risque_poteau == value and len(x.equipements)>0
+  return lambda x: x.risque_poteau == value
+
 def commune_to_dict(item):
+    hig = len(filter(poteaux_filter(R_HIG), item.poteaux))
+    sec = len(filter(poteaux_filter(R_SEC), item.poteaux))
+    hig_eq = len(filter(poteaux_filter(R_HIG, equipements=True), item.poteaux))
+    sec_eq = len(filter(poteaux_filter(R_SEC, equipements=True), item.poteaux))
     return (
         item.nom_commune,
-        item.nb_poteaux_inventories_risque_fort,
-        item.nb_poteaux_inventories_risque_secondaire,
-        (item.nb_poteaux_inventories_risque_fort or 0) + (item.nb_poteaux_inventories_risque_secondaire or 0),
-        item.nb_poteaux_equipes_risque_fort,
-        item.nb_poteaux_equipes_risque_secondaire,
-        (item.nb_poteaux_equipes_risque_fort or 0) + (item.nb_poteaux_equipes_risque_secondaire or 0),
-        get_nb_poteaux(item, 2014),
-        get_nb_poteaux(item, 2015),
-        get_nb_poteaux(item, 2016),
-        item.m_troncons_inventories_risque_fort,
-        item.m_troncons_inventories_risque_secondaire,
-        (item.m_troncons_inventories_risque_fort or 0) + (item.m_troncons_inventories_risque_secondaire or 0),
-        item.m_troncons_equipes_risque_fort,
-        item.m_troncons_equipes_risque_secondaire,
-        (item.m_troncons_equipes_risque_fort or 0) + (item.m_troncons_equipes_risque_secondaire or 0),
-        get_len_troncons(item, 2014),
-        get_len_troncons(item, 2015),
-        get_len_troncons(item, 2016),
+        hig,
+        sec,
+        hig + sec,
+        hig_eq,
+        sec_eq,
+        hig_eq + sec_eq,
+       '',
+       '',
+       '',
+       '',
+       '',
+       '',
+       '',
+       '',
+       '',
+       '',
+       '',
+       '',
+        # get_nb_poteaux(item, 2014),
+        # get_nb_poteaux(item, 2015),
+        # get_nb_poteaux(item, 2016),
+        # item.m_troncons_inventories_risque_fort,
+        # item.m_troncons_inventories_risque_secondaire,
+        # (item.m_troncons_inventories_risque_fort or 0) + (item.m_troncons_inventories_risque_secondaire or 0),
+        # item.m_troncons_equipes_risque_fort,
+        # item.m_troncons_equipes_risque_secondaire,
+        # (item.m_troncons_equipes_risque_fort or 0) + (item.m_troncons_equipes_risque_secondaire or 0),
+        # get_len_troncons(item, 2014),
+        # get_len_troncons(item, 2015),
+        # get_len_troncons(item, 2016),
         )
 
 def add_header_row(entries, name):
