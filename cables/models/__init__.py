@@ -422,7 +422,7 @@ class TCommune(Base):
     )
 
     insee = Column(Integer, primary_key=True)
-    nom_commune = Column(String(100))
+    nom_commune = Column(Unicode(100))
     geom = Column(NullType, nullable=False, index=True)
     geom_json = Column(String)
 

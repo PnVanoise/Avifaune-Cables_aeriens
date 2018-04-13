@@ -118,28 +118,27 @@ def commune_to_dict(item):
        '',
        '',
        '',
-       '',
        '')
     troncons_year = tuple( get_len_troncons(item, year, qfilter) for year in years_t )
     return poteaux + poteaux_year + troncons + troncons_year
 
 def add_header_row(entries, name):
-    labels_years_p = tuple('Nb poteaux équipés en %s' % year for year in years_p)
-    labels_years_t = tuple('Nb troncons équipés en %s' % year for year in years_t)
+    labels_years_p = tuple(u'Nb poteaux équipés en %s' % year for year in years_p)
+    labels_years_t = tuple(u'Longueur troncons équipés en %s' % year for year in years_t)
     entries.insert(0, (
         name,
-        'Nb poteaux risque fort',
-        'Nb poteaux risque secondaire',
-        'Nb poteaux risque',
-        'Nb poteaux équipés risque fort',
-        'Nb poteaux équipés risque secondaire',
-        'Nb poteaux équipés risque') +
+        u'Nb poteaux risque fort',
+        u'Nb poteaux risque secondaire',
+        u'Nb poteaux risque',
+        u'Nb poteaux équipés risque fort',
+        u'Nb poteaux équipés risque secondaire',
+        u'Nb poteaux équipés risque') +
         labels_years_p + (
-        'Longueur troncons risque élevé',
-        'Longueur troncons risque secondaire',
-        'Longueur troncons risque',
-        'Longueur troncons équipés risque élevé',
-        'Longueur troncons équipés risque secondaire',
-        'Longueur troncons équipés risque') +
+        u'Longueur troncons risque élevé',
+        u'Longueur troncons risque secondaire',
+        u'Longueur troncons risque',
+        u'Longueur troncons équipés risque élevé',
+        u'Longueur troncons équipés risque secondaire',
+        u'Longueur troncons équipés risque') +
         labels_years_t
         )
