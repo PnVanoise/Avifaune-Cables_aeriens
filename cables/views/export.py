@@ -49,7 +49,8 @@ def zs_to_dict(item):
         item.nb_poteaux_equipes_risque_fort,
         item.nb_poteaux_equipes_risque_secondaire,
         (item.nb_poteaux_equipes_risque_fort or 0) + (item.nb_poteaux_equipes_risque_secondaire or 0))
-    poteaux_year = tuple( get_nb_poteaux(item, year) for year in years_p )
+    qfilter = TInventairePoteauxErdf.id_zone_sensible==item.id_zone_sensible
+    poteaux_year = tuple( get_nb_poteaux(item, year, qfilter) for year in years_p )
     troncons = (
         item.m_troncons_inventories_risque_fort,
         item.m_troncons_inventories_risque_secondaire,
@@ -57,21 +58,18 @@ def zs_to_dict(item):
         item.m_troncons_equipes_risque_fort,
         item.m_troncons_equipes_risque_secondaire,
         (item.m_troncons_equipes_risque_fort or 0) + (item.m_troncons_equipes_risque_secondaire or 0))
-    troncons_year = tuple( get_len_troncons(item, year) for year in years_t )
+    qfilter = TInventaireTronconsErdf.id_zone_sensible==item.id_zone_sensible
+    troncons_year = tuple( get_len_troncons(item, year, qfilter) for year in years_t )
     return poteaux + poteaux_year + troncons + troncons_year
 
-def get_nb_poteaux(item, year, qfilter=None):
-    if qfilter is None:
-        qfilter = TInventairePoteauxErdf.id_zone_sensible==item.id_zone_sensible
+def get_nb_poteaux(item, year, qfilter):
     return DBSession.query(TInventairePoteauxErdf).\
             join(TEquipementsPoteauxErdf).\
             filter(qfilter).\
             filter(year_extract_p==year).\
             count()
 
-def get_len_troncons(item, year, qfilter=None):
-    if qfilter is None:
-        qfilter = TInventaireTronconsErdf.id_zone_sensible==item.id_zone_sensible
+def get_len_troncons(item, year, qfilter):
     length = DBSession.query(func.sum(TInventaireTronconsErdf.lg_equipee)).\
             join(TEquipementsTronconsErdf).\
             filter(qfilter).\
