@@ -574,12 +574,14 @@ class TInventaireTronconsErdf(Base):
     nb_photos = Column(Integer)
     lg_equipee = Column(Float(53))
     longueur = Column(Float(53))
+    insee = Column(ForeignKey(u't_communes.insee'))
 
     dico_classes_risque = relationship(u'DicoClassesRisque', primaryjoin='TInventaireTronconsErdf.id_risque_deplacement == DicoClassesRisque.id_classe_risque')
     dico_classes_risque1 = relationship(u'DicoClassesRisque', primaryjoin='TInventaireTronconsErdf.id_risque_integration_bati == DicoClassesRisque.id_classe_risque')
     dico_classes_risque2 = relationship(u'DicoClassesRisque', primaryjoin='TInventaireTronconsErdf.id_risque_integration_topo == DicoClassesRisque.id_classe_risque')
     dico_classes_risque3 = relationship(u'DicoClassesRisque', primaryjoin='TInventaireTronconsErdf.id_risque_integration_vegetation == DicoClassesRisque.id_classe_risque')
     t_zones_sensible = relationship(u'TZonesSensible')
+    t_commune = relationship(u'TCommune', backref='troncons')
 
 
 class TObservation(Base):
