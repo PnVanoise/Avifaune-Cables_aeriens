@@ -4,7 +4,6 @@ import logging
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound, HTTPBadRequest
 
-from sqlalchemy import extract
 from sqlalchemy.sql import func
 from numpy import array
 
@@ -12,19 +11,10 @@ from cables.models import DBSession
 from cables.models import TVZonesSensibles, TCommune, \
         TInventairePoteauxErdf, TEquipementsPoteauxErdf, \
         TInventaireTronconsErdf, TEquipementsTronconsErdf
+from cables.views import year_extract_p, year_extract_t, years_p, years_t, \
+        R_HIG, R_SEC, R_LOW, to_int
 
 log = logging.getLogger(__name__)
-
-year_extract_p = extract('year', TEquipementsPoteauxErdf.date_equipement)
-year_extract_t = extract('year', TEquipementsTronconsErdf.date_equipement_troncon)
-years_p = ()
-years_t = ()
-
-R_HIG = u'Risque élevé'
-R_SEC = u'Risque secondaire'
-R_LOW = u'Peu ou pas de risque'
-
-to_int = lambda x: int(x[0])
 
 @view_config(route_name='export_zonessensibles', renderer='csv')
 def export_zonessensibles(request):
