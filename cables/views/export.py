@@ -69,12 +69,13 @@ def get_nb_poteaux(item, year, qfilter):
             filter(year_extract_p==year).\
             count()
 
-def get_len_troncons(item, year, qfilter):
-    length = DBSession.query(func.sum(TInventaireTronconsErdf.lg_equipee)).\
+def get_len_troncons(item, qfilter, year=None):
+    q = DBSession.query(func.sum(TInventaireTronconsErdf.lg_equipee)).\
             join(TEquipementsTronconsErdf).\
-            filter(qfilter).\
-            filter(year_extract_t==year).\
-            first()[0]
+            filter(qfilter)
+    if year is not None:
+        q = q.filter(year_extract_t==year)
+    length = q.first()[0]
     return 0 if length is None else int(length)
 
 @view_config(route_name='export_communes', renderer='csv')
