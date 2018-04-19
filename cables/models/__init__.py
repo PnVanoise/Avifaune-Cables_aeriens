@@ -6,12 +6,23 @@ from sqlalchemy import BigInteger, Boolean, CheckConstraint, Column, Date, DateT
 from sqlalchemy.sql.sqltypes import NullType
 from sqlalchemy.orm import relationship, mapper
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.associationproxy import association_proxy
 
 log = logging.getLogger(__name__)
 
 Base = sqlahelper.get_base()
 metadata = Base.metadata
 DBSession = sqlahelper.get_session()
+
+
+def outer_join_accessor_factory(collection_type, proxy):
+    def getter(obj):
+        if obj is None:
+            return None
+        return getattr(obj, proxy.value_attr)
+    def setter(obj, value):
+        setattr(obj, proxy.value_attr, value)
+    return getter, setter
 
 class DicoAge(Base):
     __tablename__ = 'dico_age'
@@ -426,6 +437,8 @@ class TCommune(Base):
     geom = Column(NullType, nullable=False, index=True)
     geom_json = Column(String)
 
+    equipements = association_proxy('poteaux', 'equipements', getset_factory=outer_join_accessor_factory)
+    eq_troncons = association_proxy('troncons', 'equipements', getset_factory=outer_join_accessor_factory)
 
 class TEquipementsPoteauxErdf(Base):
     __tablename__ = 't_equipements_poteaux_erdf'
