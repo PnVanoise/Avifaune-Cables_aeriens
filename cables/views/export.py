@@ -84,6 +84,7 @@ def export_communes(request):
     DBSession.execute('SET search_path TO cables73, public')
     years_p = tuple(sorted(map(to_int, DBSession.query(year_extract_p).distinct().all())))
     years_t = tuple(sorted(map(to_int, DBSession.query(year_extract_t).distinct().all())))
+
     communes_poteaux = map(lambda x: x.insee, DBSession.query(TCommune.insee) \
         .join(TInventairePoteauxErdf) \
         .join(TEquipementsPoteauxErdf) \
@@ -92,7 +93,6 @@ def export_communes(request):
         .join(TInventaireTronconsErdf) \
         .filter(TInventaireTronconsErdf.lg_equipee != None) \
         .distinct())
-
     ids = list(set(communes_poteaux + communes_troncons))
 
     query = DBSession.query(TCommune) \
@@ -109,14 +109,12 @@ def poteaux_filter(value, equipements=False):
       return lambda x: x.risque_poteau == value and len(x.equipements)>0
   return lambda x: x.risque_poteau == value
 
-def troncons_filter(value, equipements=False):
-  if equipements:
-      return lambda x: x.risque_troncon == value and len(x.equipements)>0
-  return lambda x: x.risque_troncon == value
-
-def len_troncons (troncons, rfilter = None):
-    if rfilter is not None:
-        troncons = filter(lambda x: x.risque_troncon == rfilter, troncons)
+def len_troncons (troncons, rfilter, equipements=False):
+    if equipements:
+        qf = lambda x: x.risque_troncon == rfilter and len(x.equipements)>0
+    else:
+        qf = lambda x: x.risque_troncon == rfilter
+    troncons = filter(lambda x: x.risque_troncon == rfilter, troncons)
     return int(sum(filter(
         lambda t: t if t is not None else 0,
         [ troncon.lg_equipee for troncon in troncons ])))
@@ -134,15 +132,17 @@ def commune_to_dict(item):
         hig_eq, sec_eq, hig_eq + sec_eq)
     poteaux_year = tuple(get_nb_poteaux(item, year, pfilter) for year in years_p)
 
-    t_hig = len_troncons(item.troncons, rfilter=R_HIG)
-    t_sec = len_troncons(item.troncons, rfilter=R_SEC)
+    t_hig = len_troncons(item.troncons, R_HIG)
+    t_sec = len_troncons(item.troncons, R_SEC)
+    t_hig_eq = len_troncons(item.troncons, R_HIG, equipements=True)
+    t_sec_eq = len_troncons(item.troncons, R_SEC, equipements=True)
     troncons = (
        t_hig,
        t_sec,
        t_hig + t_sec,
-       '',
-       '',
-       '')
+       t_hig_eq,
+       t_sec_eq,
+       t_hig_eq + t_sec_eq)
     troncons_year = tuple( get_len_troncons(item, tfilter, year) for year in years_t )
     return poteaux + poteaux_year + troncons + troncons_year
 
