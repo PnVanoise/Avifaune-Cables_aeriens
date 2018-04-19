@@ -84,9 +84,22 @@ def export_communes(request):
     DBSession.execute('SET search_path TO cables73, public')
     years_p = tuple(sorted(map(to_int, DBSession.query(year_extract_p).distinct().all())))
     years_t = tuple(sorted(map(to_int, DBSession.query(year_extract_t).distinct().all())))
-    query = DBSession.query(TCommune) \
+    communes_poteaux = map(lambda x: x.insee, DBSession.query(TCommune.insee) \
         .join(TInventairePoteauxErdf) \
-        .join(TEquipementsPoteauxErdf)
+        .join(TEquipementsPoteauxErdf) \
+        .distinct())
+    communes_troncons = map(lambda x: x.insee, DBSession.query(TCommune.insee) \
+        .join(TInventaireTronconsErdf) \
+        .filter(TInventaireTronconsErdf.lg_equipee != None) \
+        .distinct())
+
+    ids = list(set(communes_poteaux + communes_troncons))
+
+    query = DBSession.query(TCommune) \
+        .outerjoin(TInventairePoteauxErdf) \
+        .outerjoin(TEquipementsPoteauxErdf) \
+        .outerjoin(TInventaireTronconsErdf) \
+        .filter(TCommune.insee.in_(ids))
     entries = map(commune_to_dict, query)
     add_header_row(entries, 'Commune')
     return array(entries).transpose()
@@ -96,25 +109,41 @@ def poteaux_filter(value, equipements=False):
       return lambda x: x.risque_poteau == value and len(x.equipements)>0
   return lambda x: x.risque_poteau == value
 
+def troncons_filter(value, equipements=False):
+  if equipements:
+      return lambda x: x.risque_troncon == value and len(x.equipements)>0
+  return lambda x: x.risque_troncon == value
+
+def len_troncons (troncons, rfilter = None):
+    if rfilter is not None:
+        troncons = filter(lambda x: x.risque_troncon == rfilter, troncons)
+    return int(sum(filter(
+        lambda t: t if t is not None else 0,
+        [ troncon.lg_equipee for troncon in troncons ])))
+
 def commune_to_dict(item):
     hig = len(filter(poteaux_filter(R_HIG), item.poteaux))
     sec = len(filter(poteaux_filter(R_SEC), item.poteaux))
     hig_eq = len(filter(poteaux_filter(R_HIG, equipements=True), item.poteaux))
     sec_eq = len(filter(poteaux_filter(R_SEC, equipements=True), item.poteaux))
-    qfilter = TInventairePoteauxErdf.insee == item.insee
+    pfilter = TInventairePoteauxErdf.insee == item.insee
+    tfilter = TInventaireTronconsErdf.insee == item.insee
 
     poteaux = (item.nom_commune,
         hig, sec, hig + sec,
         hig_eq, sec_eq, hig_eq + sec_eq)
-    poteaux_year = tuple( get_nb_poteaux(item, year, qfilter) for year in years_p )
+    poteaux_year = tuple(get_nb_poteaux(item, year, pfilter) for year in years_p)
+
+    t_hig = len_troncons(item.troncons, rfilter=R_HIG)
+    t_sec = len_troncons(item.troncons, rfilter=R_SEC)
     troncons = (
-       '',
-       '',
-       '',
+       t_hig,
+       t_sec,
+       t_hig + t_sec,
        '',
        '',
        '')
-    troncons_year = tuple( get_len_troncons(item, year, qfilter) for year in years_t )
+    troncons_year = tuple( get_len_troncons(item, tfilter, year) for year in years_t )
     return poteaux + poteaux_year + troncons + troncons_year
 
 def add_header_row(entries, name):
