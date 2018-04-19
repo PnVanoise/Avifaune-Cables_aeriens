@@ -12,7 +12,7 @@ from cables.models import TVZonesSensibles, TCommune, \
         TInventairePoteauxErdf, TEquipementsPoteauxErdf, \
         TInventaireTronconsErdf, TEquipementsTronconsErdf
 from cables.views import year_extract_p, year_extract_t, years_p, years_t, \
-        R_HIG, R_SEC, R_LOW, to_int
+        R_HIG, R_SEC, R_LOW, to_int, add_header_row
 
 log = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ def export_zonessensibles(request):
     years_p = tuple(sorted(map(to_int, DBSession.query(year_extract_p).distinct().all())))
     years_t = tuple(sorted(map(to_int, DBSession.query(year_extract_t).distinct().all())))
     entries = map(zs_to_dict, query)
-    add_header_row(entries, 'nom')
+    add_header_row(entries, 'nom', years_p, years_t)
     return array(entries).transpose()
 
 def zs_to_dict(item):
@@ -91,7 +91,7 @@ def export_communes(request):
         .outerjoin(TInventaireTronconsErdf) \
         .filter(TCommune.insee.in_(ids))
     entries = map(commune_to_dict, query)
-    add_header_row(entries, 'Commune')
+    add_header_row(entries, 'Commune', years_p, years_t)
     return array(entries).transpose()
 
 def poteaux_filter(value, equipements=False):
@@ -135,24 +135,3 @@ def commune_to_dict(item):
        t_hig_eq + t_sec_eq)
     troncons_year = tuple( get_len_troncons(item, tfilter, year) for year in years_t )
     return poteaux + poteaux_year + troncons + troncons_year
-
-def add_header_row(entries, name):
-    labels_years_p = tuple(u'Nb poteaux équipés en %s' % year for year in years_p)
-    labels_years_t = tuple(u'Longueur troncons équipés en %s' % year for year in years_t)
-    entries.insert(0, (
-        name,
-        u'Nb poteaux risque fort',
-        u'Nb poteaux risque secondaire',
-        u'Nb poteaux risque',
-        u'Nb poteaux équipés risque fort',
-        u'Nb poteaux équipés risque secondaire',
-        u'Nb poteaux équipés risque') +
-        labels_years_p + (
-        u'Longueur troncons risque élevé',
-        u'Longueur troncons risque secondaire',
-        u'Longueur troncons risque',
-        u'Longueur troncons équipés risque élevé',
-        u'Longueur troncons équipés risque secondaire',
-        u'Longueur troncons équipés risque') +
-        labels_years_t
-        )
