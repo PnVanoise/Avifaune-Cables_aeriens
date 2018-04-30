@@ -15,7 +15,7 @@ R_HIG = u'Risque élevé'
 R_SEC = u'Risque secondaire'
 R_LOW = u'Peu ou pas de risque'
 
-to_int = lambda x: int(x[0])
+to_int = lambda x: int(x[0]) if x[0] is not None else 0
 
 def add_header_row(entries, name, years_p, years_t):
     labels_years_p = tuple(u'Nb poteaux équipés en %s' % year for year in years_p)
