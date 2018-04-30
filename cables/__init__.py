@@ -31,6 +31,7 @@ def main(global_config, **settings):
     # add routes to the entry view class
     config.add_route('export_zonessensibles', '/export/zonessensibles')
     config.add_route('export_communes', '/export/communes')
+    config.add_route('export_departements', '/export/departements')
     config.scan()
 
     # add the static view (for static resources)
