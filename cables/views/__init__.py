@@ -37,3 +37,10 @@ def add_header_row(entries, name, years_p, years_t):
         u'Longueur troncons équipés risque') +
         labels_years_t
         )
+
+def flatten_years_item(item):
+    return item['poteaux'] + tuple(map(lambda r: r[1], item['poteaux_year'])) + \
+            item['troncons'] + tuple(map(lambda r: r[1], item['troncons_year']))
+
+def flatten_years(entries):
+    return map(flatten_years_item, entries)
