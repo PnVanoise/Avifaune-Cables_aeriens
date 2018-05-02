@@ -12,13 +12,15 @@ from cables.models import TVZonesSensibles, TCommune, \
         TInventairePoteauxErdf, TEquipementsPoteauxErdf, \
         TInventaireTronconsErdf, TEquipementsTronconsErdf
 from cables.views import year_extract_p, year_extract_t, years_p, years_t, \
-        R_HIG, R_SEC, R_LOW, to_int, add_header_row
+        R_HIG, R_SEC, R_LOW, to_int, add_header_row, flatten
 from cables.views.export import get_communes
 
 log = logging.getLogger(__name__)
 
 @view_config(route_name='export_departements', renderer='csv')
 def export_departements(request):
-    entries = get_communes('cables73')
+    entries = flatten(
+            get_communes('cables73') + get_communes('cables74'),
+            compute_years=True)
     add_header_row(entries, u'Département', years_p, years_t)
     return array(entries).transpose()

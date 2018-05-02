@@ -12,7 +12,7 @@ from cables.models import TVZonesSensibles, TCommune, \
         TInventairePoteauxErdf, TEquipementsPoteauxErdf, \
         TInventaireTronconsErdf, TEquipementsTronconsErdf
 from cables.views import year_extract_p, year_extract_t, years_p, years_t, \
-        R_HIG, R_SEC, R_LOW, to_int, add_header_row, flatten_years
+        R_HIG, R_SEC, R_LOW, to_int, add_header_row, flatten
 
 log = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ def get_len_troncons(item, qfilter, year=None):
 @view_config(route_name='export_communes', renderer='csv')
 def export_communes(request):
     entries = get_communes('cables73')
-    entries = flatten_years(entries)
+    entries = flatten(entries)
     add_header_row(entries, 'Commune', years_p, years_t)
     return array(entries).transpose()
 
@@ -123,7 +123,7 @@ def commune_to_dict(item):
     tfilter = TInventaireTronconsErdf.insee == item.insee
 
     poteaux = (item.nom_commune, hig, sec, hig + sec, hig_eq, sec_eq, hig_eq + sec_eq)
-    poteaux_year = tuple((year, get_nb_poteaux(item, year, pfilter)) for year in years_p)
+    poteaux_year = { year: get_nb_poteaux(item, year, pfilter) for year in years_p}
 
     t_hig = len_troncons(item.troncons, R_HIG)
     t_sec = len_troncons(item.troncons, R_SEC)
@@ -131,7 +131,7 @@ def commune_to_dict(item):
     t_sec_eq = len_troncons(item.troncons, R_SEC, equipements=True)
 
     troncons = ( t_hig, t_sec, t_hig + t_sec, t_hig_eq, t_sec_eq, t_hig_eq + t_sec_eq)
-    troncons_year = tuple((year, get_len_troncons(item, tfilter, year)) for year in years_t )
+    troncons_year = {year: get_len_troncons(item, tfilter, year) for year in years_t }
 
     return {
             "poteaux": poteaux,

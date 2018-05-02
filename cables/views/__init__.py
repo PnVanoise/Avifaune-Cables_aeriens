@@ -38,9 +38,16 @@ def add_header_row(entries, name, years_p, years_t):
         labels_years_t
         )
 
-def flatten_years_item(item):
-    return item['poteaux'] + tuple(map(lambda r: r[1], item['poteaux_year'])) + \
-            item['troncons'] + tuple(map(lambda r: r[1], item['troncons_year']))
+def flatten_property(item, attr, keys=None):
+    if keys is None:
+        keys = item[attr].keys()
+    return tuple(item[attr].get(key, 0) for key in keys)
 
-def flatten_years(entries):
-    return map(flatten_years_item, entries)
+def flatten_item(item, p_years, t_years):
+    return item['poteaux'] + flatten_property(item, 'poteaux_year', keys=p_years) + \
+            item['troncons'] + flatten_property(item, 'troncons_year', keys=t_years)
+
+def flatten(entries, compute_years=False):
+    p_years = (2014, 2015, 2016) if compute_years else None
+    t_years = (2012, 2013, 2014, 2015, 2016) if compute_years else None
+    return map(lambda x: flatten_item(x, p_years, t_years), entries)
