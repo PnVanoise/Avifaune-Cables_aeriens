@@ -71,7 +71,7 @@ def get_len_troncons(item, qfilter, year=None):
 @view_config(route_name='export_communes', renderer='csv')
 def export_communes(request):
     entries = get_communes('cables73')
-    entries = flatten(entries)
+    entries = flatten(entries).get('entries')
     add_header_row(entries, 'Commune', years_p, years_t)
     return array(entries).transpose()
 

@@ -4,6 +4,8 @@ import logging
 from sqlalchemy import extract
 from cables.models import TEquipementsPoteauxErdf, TEquipementsTronconsErdf
 
+from numpy import unique, array, concatenate
+
 log = logging.getLogger(__name__)
 
 year_extract_p = extract('year', TEquipementsPoteauxErdf.date_equipement)
@@ -48,6 +50,15 @@ def flatten_item(item, p_years, t_years):
             item['troncons'] + flatten_property(item, 'troncons_year', keys=t_years)
 
 def flatten(entries, compute_years=False):
-    p_years = (2014, 2015, 2016) if compute_years else None
-    t_years = (2012, 2013, 2014, 2015, 2016) if compute_years else None
-    return map(lambda x: flatten_item(x, p_years, t_years), entries)
+    if compute_years:
+        p_keys = map(lambda x: x.get('poteaux_year').keys(), entries)
+        t_keys = map(lambda x: x.get('troncons_year').keys(), entries)
+        p_years = unique(concatenate(p_keys, axis=0).flatten())
+        t_years = unique(concatenate(t_keys, axis=0).flatten())
+    else:
+        p_years = None
+        t_years = None
+    return {
+            "p_years": p_years,
+            "t_years": t_years,
+            "entries": map(lambda x: flatten_item(x, p_years, t_years), entries)}
