@@ -8,11 +8,7 @@ from sqlalchemy.sql import func
 from numpy import array
 
 from cables.models import DBSession
-from cables.models import TVZonesSensibles, TCommune, \
-        TInventairePoteauxErdf, TEquipementsPoteauxErdf, \
-        TInventaireTronconsErdf, TEquipementsTronconsErdf
-from cables.views import year_extract_p, year_extract_t, years_p, years_t, \
-        R_HIG, R_SEC, R_LOW, to_int, add_header_row, flatten
+from cables.views import add_header_row, flatten
 from cables.views.export import get_communes
 
 log = logging.getLogger(__name__)
