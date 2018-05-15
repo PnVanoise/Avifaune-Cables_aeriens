@@ -58,7 +58,7 @@ def zs_to_dict(item):
         (item.m_troncons_equipes_risque_secondaire or 0))
     qfilter = TInventaireTronconsErdf.id_zone_sensible == item.id_zone_sensible
     troncons_year = tuple(
-            get_len_troncons(item, year, qfilter) for year in years_t)
+            get_len_troncons(item, qfilter, year) for year in years_t)
     return poteaux + poteaux_year + troncons + troncons_year
 
 
