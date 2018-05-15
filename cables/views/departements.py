@@ -19,7 +19,7 @@ def export_departements(request):
     entries = flattened.get('entries')
     add_header_row(
             entries,
-            u'Département',
+            (u'Département', u'Commune'),
             flattened.get('p_years'),
             flattened.get('t_years'))
     return array(entries).transpose()

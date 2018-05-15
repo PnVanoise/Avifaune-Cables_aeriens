@@ -159,6 +159,7 @@ def commune_to_dict(item):
             year: get_len_troncons(item, tfilter, year) for year in years_t}
 
     return {
+            "dept": (unicode(item.insee)[0:2],),
             "poteaux": poteaux,
             "poteaux_year": poteaux_year,
             "troncons": troncons,

@@ -28,8 +28,7 @@ def add_header_row(entries, name, years_p, years_t):
             u'Nb poteaux équipés en %s' % year for year in years_p)
     labels_years_t = tuple(
             u'Longueur troncons équipés en %s' % year for year in years_t)
-    entries.insert(0, (
-        name,
+    entries.insert(0, (name if isinstance(name, tuple) else (name,)) + (
         u'Nb poteaux risque fort',
         u'Nb poteaux risque secondaire',
         u'Nb poteaux risque',
@@ -53,8 +52,8 @@ def flatten_property(item, attr, keys=None):
     return tuple(item[attr].get(key, 0) for key in keys)
 
 
-def flatten_item(item, p_years, t_years):
-    return item['poteaux'] + \
+def flatten_item(item, p_years, t_years, dept=False):
+    return (item['dept'] if dept else ()) + item['poteaux'] + \
             flatten_property(item, 'poteaux_year', keys=p_years) + \
             item['troncons'] + \
             flatten_property(item, 'troncons_year', keys=t_years)
@@ -72,5 +71,5 @@ def flatten(entries, compute_years=False):
     return {
             "p_years": p_years,
             "t_years": t_years,
-            "entries": map(
-                lambda x: flatten_item(x, p_years, t_years), entries)}
+            "entries": map(lambda x: flatten_item(
+                x, p_years, t_years, compute_years), entries)}
