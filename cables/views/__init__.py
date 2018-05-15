@@ -72,4 +72,5 @@ def flatten(entries, compute_years=False):
     return {
             "p_years": p_years,
             "t_years": t_years,
-            "entries": map(lambda x: flatten_item(x, p_years, t_years), entries)}
+            "entries": map(
+                lambda x: flatten_item(x, p_years, t_years), entries)}
