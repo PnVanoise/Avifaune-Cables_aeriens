@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 @view_config(route_name='export_departements', renderer='csv')
 def export_departements(request):
     flattened = flatten(
-            get_communes('cables73') + get_communes('cables74'),
+            get_communes('73') + get_communes('74'),
             compute_years=True)
     entries = flattened.get('entries')
     add_header_row(

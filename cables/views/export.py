@@ -82,15 +82,15 @@ def get_len_troncons(item, qfilter, year=None):
 
 @view_config(route_name='export_communes', renderer='csv')
 def export_communes(request):
-    entries = get_communes('cables73')
+    entries = get_communes('73')
     entries = flatten(entries).get('entries')
     add_header_row(entries, 'Commune', years_p, years_t)
     return array(entries).transpose()
 
 
-def get_communes(schema):
+def get_communes(dept):
     global years_p, years_t
-    DBSession.execute('SET search_path TO %s, public' % schema)
+    DBSession.execute('SET search_path TO cables%s, public' % dept)
     years_p = tuple(sorted(
         map(to_int, DBSession.query(year_extract_p).distinct().all())))
     years_t = tuple(sorted(
