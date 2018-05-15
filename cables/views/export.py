@@ -128,7 +128,7 @@ def len_troncons(troncons, rfilter, equipements=False):
         qf = lambda x: x.risque_troncon == rfilter and len(x.equipements) > 0
     else:
         qf = lambda x: x.risque_troncon == rfilter
-    troncons = filter(lambda x: x.risque_troncon == rfilter, troncons)
+    troncons = filter(qf, troncons)
     return int(sum(filter(
         lambda t: t if t is not None else 0,
         [troncon.lg_equipee for troncon in troncons])))
