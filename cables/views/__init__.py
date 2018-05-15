@@ -1,15 +1,16 @@
-## -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import logging
 
 from sqlalchemy import extract
 from cables.models import TEquipementsPoteauxErdf, TEquipementsTronconsErdf
 
-from numpy import unique, array, concatenate
+from numpy import unique, concatenate
 
 log = logging.getLogger(__name__)
 
 year_extract_p = extract('year', TEquipementsPoteauxErdf.date_equipement)
-year_extract_t = extract('year', TEquipementsTronconsErdf.date_equipement_troncon)
+year_extract_t = extract('year',
+                         TEquipementsTronconsErdf.date_equipement_troncon)
 years_p = ()
 years_t = ()
 
@@ -17,11 +18,16 @@ R_HIG = u'Risque élevé'
 R_SEC = u'Risque secondaire'
 R_LOW = u'Peu ou pas de risque'
 
-to_int = lambda x: int(x[0]) if x[0] is not None else 0
+
+def to_int(x):
+    return int(x[0]) if x[0] is not None else 0
+
 
 def add_header_row(entries, name, years_p, years_t):
-    labels_years_p = tuple(u'Nb poteaux équipés en %s' % year for year in years_p)
-    labels_years_t = tuple(u'Longueur troncons équipés en %s' % year for year in years_t)
+    labels_years_p = tuple(
+            u'Nb poteaux équipés en %s' % year for year in years_p)
+    labels_years_t = tuple(
+            u'Longueur troncons équipés en %s' % year for year in years_t)
     entries.insert(0, (
         name,
         u'Nb poteaux risque fort',
@@ -40,14 +46,19 @@ def add_header_row(entries, name, years_p, years_t):
         labels_years_t
         )
 
+
 def flatten_property(item, attr, keys=None):
     if keys is None:
         keys = item[attr].keys()
     return tuple(item[attr].get(key, 0) for key in keys)
 
+
 def flatten_item(item, p_years, t_years):
-    return item['poteaux'] + flatten_property(item, 'poteaux_year', keys=p_years) + \
-            item['troncons'] + flatten_property(item, 'troncons_year', keys=t_years)
+    return item['poteaux'] + \
+            flatten_property(item, 'poteaux_year', keys=p_years) + \
+            item['troncons'] + \
+            flatten_property(item, 'troncons_year', keys=t_years)
+
 
 def flatten(entries, compute_years=False):
     if compute_years:
