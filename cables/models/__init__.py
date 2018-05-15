@@ -472,7 +472,7 @@ class TEquipementsTronconsErdf(Base):
     login_saisie = Column(String(25))
     geom_json = Column(String)
 
-    t_inventaire_troncons_erdf = relationship(u'TInventaireTronconsErdf')
+    t_inventaire_troncons_erdf = relationship(u'TInventaireTronconsErdf', backref="equipements")
     dico_type_equipement_troncon = relationship(u'DicoTypeEquipementTroncon')
 
 

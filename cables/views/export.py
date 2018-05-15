@@ -112,6 +112,7 @@ def get_communes(schema):
         .outerjoin(TInventairePoteauxErdf) \
         .outerjoin(TEquipementsPoteauxErdf) \
         .outerjoin(TInventaireTronconsErdf) \
+        .outerjoin(TEquipementsTronconsErdf) \
         .filter(TCommune.insee.in_(ids))
     entries = map(commune_to_dict, query)
     return entries
