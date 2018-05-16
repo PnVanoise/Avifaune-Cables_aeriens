@@ -22,4 +22,7 @@ def export_departements(request):
             (u'Département', u'Commune'),
             flattened.get('p_years'),
             flattened.get('t_years'))
-    return array(entries).transpose()
+    # Full array
+    transposed = array(entries).transpose()
+    # Delete commune row
+    return delete(transposed, 1, 0)
