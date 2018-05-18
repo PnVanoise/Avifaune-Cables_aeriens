@@ -30,7 +30,7 @@ requires = [
     'numpy',
     'ipdb',
     'traitlets',
-    'ipython',
+    'ipython==5.7.0',
     'enum',
 ]
 
