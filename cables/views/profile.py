@@ -4,6 +4,7 @@ import logging
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPBadRequest
 
+from cables import PROFILES
 from cables.models import DBSession
 from cables.models.utilisateurs import TRole, BibOrganisme
 
@@ -19,5 +20,6 @@ def profile(request):
             TRole.identifiant == user).first()
     if profile is None:
         raise HTTPNotFound()
-    org = profile.bib_organisme.id_organisme
-    return {"org": org}
+    id_org = profile.bib_organisme.id_organisme
+    return {"id_org": id_org,
+            "org": PROFILES[str(id_org)] if str(id_org) in PROFILES else ''}
