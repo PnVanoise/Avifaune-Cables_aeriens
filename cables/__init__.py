@@ -5,9 +5,14 @@ import sqlahelper
 
 from pyramid_beaker import session_factory_from_settings
 
+PROFILES = {}
+
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    for p in ['rte', 'enedis', 'ogm']:
+        PROFILES[settings['profile.%s' % p]] = p
 
     session_factory = session_factory_from_settings(settings)
     config = Configurator(settings=settings, session_factory=session_factory)
