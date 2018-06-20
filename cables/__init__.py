@@ -1,14 +1,7 @@
-#-*- coding: utf-8 -*-
-import os
-
+# -*- coding: utf-8 -*-
 from pyramid.config import Configurator
-from pyramid.authentication import AuthTktAuthenticationPolicy
-from pyramid.decorator import reify
-from pyramid.request import Request
-from pyramid.security import unauthenticated_userid
 import sqlalchemy
 import sqlahelper
-import pyramid_tm
 
 from pyramid_beaker import session_factory_from_settings
 
