@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 from pyramid.config import Configurator
+from pyramid.events import NewResponse, subscriber
+from pyramid_beaker import session_factory_from_settings
 import sqlalchemy
 import sqlahelper
 
-from pyramid_beaker import session_factory_from_settings
-
 PROFILES = {}
+
+
+@subscriber(NewResponse)
+def add_cors_headers(event):
+    if event.request.path == '/profile':
+        event.response.headers.update({
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            })
 
 
 def main(global_config, **settings):
