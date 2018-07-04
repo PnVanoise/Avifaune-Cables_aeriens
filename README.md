@@ -11,7 +11,9 @@ $ buildout/bin/buildout
 
 ### Configuration
 
- - Renseigner le(s) fichier(s) development.ini (production.ini) avec les paramètres de connexion à la base (format `postgresql://user:pass@host:port/base`)
+ Renseigner le(s) fichier(s) development.ini (production.ini) avec les paramètres de connexion à la base:
+ - clef: `sqlalchemy.url`
+ - format: `postgresql://user:pass@host:port/base`
 
 
 ### Déploiement
