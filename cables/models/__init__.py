@@ -540,6 +540,7 @@ class TInventairePoteauxErdf(Base):
     nb_equipements = Column(Integer)
     nb_photos = Column(Integer)
     insee = Column(ForeignKey(u't_communes.insee'))
+    zone_life = Column(Boolean)
 
     dico_classes_risque = relationship(u'DicoClassesRisque', primaryjoin='TInventairePoteauxErdf.id_attractivite == DicoClassesRisque.id_classe_risque')
     dico_classes_risque1 = relationship(u'DicoClassesRisque', primaryjoin='TInventairePoteauxErdf.id_dangerosite == DicoClassesRisque.id_classe_risque')
@@ -575,6 +576,7 @@ class TInventaireTronconsErdf(Base):
     lg_equipee = Column(Float(53))
     longueur = Column(Float(53))
     insee = Column(ForeignKey(u't_communes.insee'))
+    zone_life = Column(Boolean)
 
     dico_classes_risque = relationship(u'DicoClassesRisque', primaryjoin='TInventaireTronconsErdf.id_risque_deplacement == DicoClassesRisque.id_classe_risque')
     dico_classes_risque1 = relationship(u'DicoClassesRisque', primaryjoin='TInventaireTronconsErdf.id_risque_integration_bati == DicoClassesRisque.id_classe_risque')
