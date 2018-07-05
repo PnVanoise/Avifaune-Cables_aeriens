@@ -39,6 +39,7 @@ def main(global_config, **settings):
     config.add_route('export_zonessensibles', '/export/zonessensibles')
     config.add_route('export_communes', '/export/communes')
     config.add_route('export_departements', '/export/departements')
+    config.add_route('export_life', '/export/life')
     config.add_route('profile', '/profile')
     config.scan()
 

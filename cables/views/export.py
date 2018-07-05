@@ -88,7 +88,7 @@ def export_communes(request):
     return array(entries).transpose()
 
 
-def get_communes(dept):
+def get_communes(dept, life=None):
     global years_p, years_t
     DBSession.execute('SET search_path TO cables%s, public' % dept)
     years_p = tuple(sorted(
@@ -114,6 +114,9 @@ def get_communes(dept):
         .outerjoin(TInventaireTronconsErdf) \
         .outerjoin(TEquipementsTronconsErdf) \
         .filter(TCommune.insee.in_(ids))
+    if life is not None:
+        query = query.filter(TInventaireTronconsErdf.zone_life == life)
+        query = query.filter(TInventairePoteauxErdf.zone_life == life)
     entries = map(commune_to_dict, query)
     return entries
 
