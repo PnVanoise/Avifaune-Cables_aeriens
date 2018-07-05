@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-
 from pyramid.view import view_config
-
 from numpy import array, delete, concatenate
 
 from cables.views import add_header_row, flatten
