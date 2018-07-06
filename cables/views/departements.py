@@ -37,4 +37,5 @@ def export_departements(request):
             flattened.get('p_years'),
             flattened.get('t_years'))
 
-    return array(entries).transpose()
+    return {"rows": array(entries).transpose(),
+            "filename": 'export_departements.csv'}

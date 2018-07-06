@@ -33,4 +33,5 @@ def export_life(request):
             flattened.get('p_years'),
             flattened.get('t_years'))
 
-    return array(entries).transpose()
+    return {"rows": array(entries).transpose(),
+            "filename": 'export_life.csv' if life else 'export_hors_life.csv'}

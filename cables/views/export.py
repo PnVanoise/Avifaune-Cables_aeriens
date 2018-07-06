@@ -30,7 +30,9 @@ def export_zonessensibles(request):
         map(to_int, DBSession.query(year_extract_t).distinct().all())))
     entries = map(zs_to_dict, query)
     add_header_row(entries, 'nom', years_p, years_t)
-    return array(entries).transpose()
+
+    return {"rows": array(entries).transpose(),
+            "filename": 'export_zones_sensibles.csv'}
 
 
 def zs_to_dict(item):
@@ -85,7 +87,8 @@ def export_communes(request):
     entries = get_communes('73')
     entries = flatten(entries).get('entries')
     add_header_row(entries, 'Commune', years_p, years_t)
-    return array(entries).transpose()
+    return {"rows": array(entries).transpose(),
+            "filename": 'export_communes.csv'}
 
 
 def get_communes(dept, life=None):

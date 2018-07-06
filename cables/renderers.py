@@ -22,9 +22,10 @@ class CSVRenderer(object):
         fout.write(codecs.BOM_UTF8)
         writer = csv.writer(fout, delimiter=';', quoting=csv.QUOTE_ALL)
 
-        writer.writerows(utf_8_encoder(values))
+        writer.writerows(utf_8_encoder(values['rows']))
+        filename = values['filename']
 
         resp = system['request'].response
         resp.content_type = 'text/csv'
-        resp.content_disposition = 'attachment;filename="export.csv"'
+        resp.content_disposition = 'attachment;filename="%s"' % filename
         return fout.getvalue()
