@@ -9,7 +9,7 @@ from cables.views.export import get_communes
 log = getLogger(__name__)
 
 
-def sum_dept_values(data, life):
+def sum_values(data, life):
     """ Sum row values for cols of same department
     """
     data = array(data).transpose()
@@ -24,7 +24,7 @@ def export_life(request):
     flattened = flatten(
             get_communes(u'73', life=life) + get_communes(u'74', life=life),
             compute_years=True)
-    entries = sum_dept_values(flattened.get('entries'), life).tolist()
+    entries = sum_values(flattened.get('entries'), life).tolist()
     entries[0] = 'Life' if life else 'Hors life'
     entries = [entries]
     add_header_row(
