@@ -19,7 +19,7 @@ RewriteEngine on
 #WSGIPassAuthorization On
 
 # define a process group
-WSGIDaemonProcess siacg62:${vars:instanceid} display-name=%{GROUP} user=${vars:modwsgi_user}
+WSGIDaemonProcess cables:${vars:instanceid} display-name=%{GROUP} user=${vars:modwsgi_user}
 
 # define the path to the WSGI app
 WSGIScriptAlias /${vars:instanceid}/wsgi ${buildout:directory/buildout/parts/modwsgi/wsgi}
@@ -28,6 +28,6 @@ WSGIScriptAlias /${vars:instanceid}/wsgi ${buildout:directory/buildout/parts/mod
 # app instance in the global application group so it is always executed within
 # the main interpreter
 <Location /${vars:instanceid}/wsgi>
-    WSGIProcessGroup siacg62:${vars:instanceid}
+    WSGIProcessGroup cables:${vars:instanceid}
     WSGIApplicationGroup %{GLOBAL}
 </Location>
