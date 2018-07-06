@@ -26,4 +26,4 @@ $ buildout/bin/pserve development.ini
 
 #### Avec apache (production)
 
- - Inclure le fichier de configuration apache: `apache/wsgi.conf`
+ - Inclure le fichier de configuration apache: `apache/wsgi.conf`. Ce fichier est généré via le `buildout`, les éventuelles modifications seront donc à porter sur le fichier `apache/wsgi.conf.in` afin de ne pas être écrasées par un `buildout` ultérieur.
